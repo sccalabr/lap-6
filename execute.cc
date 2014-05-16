@@ -1,3 +1,5 @@
+#include  <iostream>
+#include  <iomanip>
 #include "thumbsim.hpp"
 #define PC_REG 15
 #define LR_REG 14
@@ -5,6 +7,7 @@
 #define PC rf[PC_REG]
 #define LR rf[LR_REG]
 #define SP rf[SP_REG]
+#define LOGGER 1
 
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
@@ -100,6 +103,9 @@ static int checkCondition(unsigned short cond) {
 
 void execute() {
    Data16 instr = imem[PC];
+   if(LOGGER) {
+      cout << "\nPC: 0x" << setfill('0') << setw(8) << hex << PC << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
+   }
    Thumb_Types itype;
    unsigned int pctarget = PC + 2;
    unsigned int addr;
