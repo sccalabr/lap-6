@@ -101,6 +101,59 @@ static int checkCondition(unsigned short cond) {
    return FALSE;
 }
 
+int countOneBits(unsigned int instruction) {
+   instruction &= 0x00FF;
+   int counter = 0;
+   
+   for( ; instruction; counter++) {
+         instruction = instruction & (instruction - 1);
+         counter++;
+   }
+
+   return counter;
+}
+
+void pushRegistersOntoStack(MISC_Type misc) {
+   unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list);
+   unsigned int spAddress = SP - 4 * numberOfRegisters;
+   // I think we need to write the link register here!
+   rf.write(LR_REG, SP);
+   unsigned int i, mask;
+   // why 14? pg167 I am using 8 because thumb has 
+   // 8 registers in the list... hopefully
+   for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
+      if(misc.instr.push.reg_list & mask) {
+         rf.write(spAddress, i);
+         spAddress += 4;
+      }
+   }
+
+   rf.write(SP_REG, SP - 4 * numberOfRegisters);
+}
+
+void popRegistersOffOfStack(MISC_Type misc) {
+   unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list);
+   unsigned int spAddress = SP;
+   
+   unsigned int i, mask;
+   //pop it says to use 0 - 7
+   for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
+      if(misc.instr.pop.reg_list & mask) {
+         // want to get the value at the address 
+         rf.write(i, spAddress);
+         spAddress += 4;
+      }
+      /* PAGE 166, Do not think that it is needed but 
+         including for reference later
+        
+        if registers<15> == '1' then
+            LoadWritePC(MemA[address,4]);
+      
+      */
+   }
+
+   rf.write(SP_REG, SP + 4 * numberOfRegisters);
+}
 void execute() {
    Data16 instr = imem[PC];
    if(LOGGER) {
@@ -215,8 +268,10 @@ void execute() {
          misc_ops = decode(misc);
          switch(misc_ops) {
             case MISC_PUSH:
+               pushRegistersOntoStack(misc);
                break;
             case MISC_POP:
+               popRegistersOffOfStack(misc);
                break;
             case MISC_SUB:
                rf.write(SP_REG, SP - (misc.instr.sub.imm*4));
@@ -244,7 +299,9 @@ void execute() {
          decode(stm);
          break;
       case LDRL:
+         //Stephen
          decode(ldrl);
+         rf.write(ldrl.instr.ldrl.rt, SP + (ldrl.instr.ldrl.imm*4));
          break;
       case ADD_SP:
          decode(addsp);
