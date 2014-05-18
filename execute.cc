@@ -7,7 +7,7 @@
 #define PC rf[PC_REG]
 #define LR rf[LR_REG]
 #define SP rf[SP_REG]
-#define LOGGER 0
+#define LOGGER 1
 
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
@@ -147,36 +147,39 @@ int countOneBits(unsigned int instruction) {
    return counter;
 }
 
-//NOT SURE HOW TO HANDLE PUSH AND POP YET MATT
 void pushRegistersOntoStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list);
    unsigned int spAddress = SP - 4 * numberOfRegisters;
-   // I think we need to write the link register here!
-   // rf.write(LR_REG, SP);
    unsigned int i, mask;
-   // why 14? pg167 I am using 8 because thumb has 
-   // 8 registers in the list... hopefully
+   
+   rf.write(LR_REG, SP);
+
+   /* pg167 I am using 8 because thumb has 
+      8 registers in the list. The document
+      says to use 14, so this may cause a problem 
+      later.
+    */
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.push.reg_list & mask) {
-   //      rf.write(spAddress, i);
+         dmem.write(spAddress, rf[i]);
          spAddress += 4;
       }
    }
 
-   //rf.write(SP_REG, SP - 4 * numberOfRegisters);
+   rf.write(SP_REG, SP - 4 * numberOfRegisters);
 }
 
-//NOT SURE HOW TO HANDLE PUSH AND POP YET MATT
+
 void popRegistersOffOfStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list);
    unsigned int spAddress = SP;
-   
    unsigned int i, mask;
+   
    //pop it says to use 0 - 7
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.pop.reg_list & mask) {
-         // want to get the value at the address 
-//         rf.write(i, spAddress);
+ 
+         rf.write(i, dmem[spAddress]);
          spAddress += 4;
       }
       /* PAGE 166, Do not think that it is needed but 
@@ -188,7 +191,8 @@ void popRegistersOffOfStack(MISC_Type misc) {
       */
    }
 
- //  rf.write(SP_REG, SP + 4 * numberOfRegisters);
+   rf.write(SP_REG, SP + 4 * numberOfRegisters);
+   rf.write(PC_REG, LR);
 }
 
 void execute() {
