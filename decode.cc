@@ -21,46 +21,88 @@ int decode (const STM_Type);
 int decode (const LDRL_Type);
 int decode (const ADD_SP_Type);
 
+bool printRegisterList(unsigned int reg_list, bool multiple) {
+       if (reg_list & 1) {
+         cout << "r0";
+         multiple = TRUE;
+       }
+       if (reg_list & 2) {
+         if (multiple)
+           cout << ", ";
+         cout << "r1";
+         multiple = TRUE;
+       }
+       if (reg_list & 4) {
+         if (multiple)
+           cout << ", ";
+         cout << "r2";
+         multiple = TRUE;
+       }
+       if (reg_list & 8) {
+         if (multiple)
+           cout << ", ";
+         cout << "r3";
+         multiple = TRUE;
+       }
+       if (reg_list & 16) {
+         if (multiple)
+           cout << ", ";
+         cout << "r4";
+         multiple = TRUE;
+       }
+       if (reg_list & 32) {
+         if (multiple)
+           cout << ", ";
+         cout << "r5";
+         multiple = TRUE;
+       }
+       if (reg_list & 64) {
+         if (multiple)
+           cout << ", ";
+         cout << "r6";
+         multiple = TRUE;
+       }
+       if (reg_list & 128) {
+         if (multiple)
+           cout << ", ";
+         cout << "r7";
+         multiple = TRUE;
+       }
+       
+       return multiple;
+}
+
+// Putting decodes here caused segfaults?
 Thumb_Types decode (const ALL_Types data) {
+
    if (data.type.alu.instr.class_type.type_check == ALU_TYPE) {
-      cout << "add 1\n";
       return ALU;
    }
    else if (data.type.dp.instr.class_type.type_check == DP_TYPE) {
-      cout << "add 2\n";
       return DP;
    }
    else if (data.type.sp.instr.class_type.type_check == SP_TYPE) {
-      cout << "add 3\n";
       return SPECIAL;
    }
    else if (data.type.uncond.instr.class_type.type_check == UNCOND_TYPE) {
-      cout << "add 4\n";
       return UNCOND;
    }
    else if (data.type.misc.instr.class_type.type_check == MISC_TYPE) {
-      cout << data.type.misc.instr.add.imm;
-      cout << "add 5\n";
       return MISC;
    }
    else if (data.type.cond.instr.class_type.type_check == COND_TYPE) {
-      cout << "add 6\n";
       return COND;
    }
    else if (data.type.ldm.instr.class_type.type_check == LDM_TYPE) {
-      cout << "add 7\n";
       return LDM;
    }
    else if (data.type.stm.instr.class_type.type_check == STM_TYPE) {
-      cout << "add 8\n";
       return STM;
    }
    else if (data.type.ldrl.instr.class_type.type_check == LDRL_TYPE) {
-      cout << "add 9\n";
       return LDRL;
    }
    else if (data.type.addsp.instr.class_type.type_check == ADD_SP_TYPE) {
-      cout << "add 10\n";
       return ADD_SP;
    }
    else {
@@ -80,6 +122,7 @@ Thumb_Types decode (const ALL_Types data) {
       cout << "add 15\n";
       }
       else {
+         cout << "The type is: " <<  data.type.ld_st.instr.class_type.opA << endl;
          cout << "NO TYPE FOUND" << endl;
          return ERROR_TYPE;
       }
@@ -99,7 +142,7 @@ ALU_Ops decode (const ALU_Type data) {
    }
    else if (data.instr.addr.op == ALU_ADDR_OP) {
       if (opts.instrs) { 
-         cout << "adds r\n" << data.instr.addr.rd  << ", r" << data.instr.addr.rn << ", r" << data.instr.addr.rm << endl;
+         cout << "adds r" << data.instr.addr.rd  << ", r" << data.instr.addr.rn << ", r" << data.instr.addr.rm << endl;
       }
       return ALU_ADDR;
    }
@@ -197,52 +240,9 @@ MISC_Ops decode (const MISC_Type data) {
        bool multiple = FALSE;
        cout << "push ";
        cout << "{";
-       if (data.instr.push.reg_list & 1) {
-         cout << "r0";
-         multiple = TRUE;
-       }
-       if (data.instr.push.reg_list & 2) {
-         if (multiple)
-           cout << ", ";
-         cout << "r1";
-         multiple = TRUE;
-       }
-       if (data.instr.push.reg_list & 4) {
-         if (multiple)
-           cout << ", ";
-         cout << "r2";
-         multiple = TRUE;
-       }
-       if (data.instr.push.reg_list & 8) {
-         if (multiple)
-           cout << ", ";
-         cout << "r3";
-         multiple = TRUE;
-       }
-       if (data.instr.push.reg_list & 16) {
-         if (multiple)
-           cout << ", ";
-         cout << "r4";
-         multiple = TRUE;
-       }
-       if (data.instr.push.reg_list & 32) {
-         if (multiple)
-           cout << ", ";
-         cout << "r5";
-         multiple = TRUE;
-       }
-       if (data.instr.push.reg_list & 64) {
-         if (multiple)
-           cout << ", ";
-         cout << "r6";
-         multiple = TRUE;
-       }
-       if (data.instr.push.reg_list & 128) {
-         if (multiple)
-           cout << ", ";
-         cout << "r7";
-         multiple = TRUE;
-       }
+       
+       multiple = printRegisterList(data.instr.push.reg_list, multiple);
+       
        if (data.instr.push.m) {
          if (multiple)
            cout << ", ";
@@ -257,52 +257,9 @@ MISC_Ops decode (const MISC_Type data) {
        bool multiple = FALSE;
        cout << "pop ";
        cout << "{";
-       if (data.instr.pop.reg_list & 1) {
-         cout << "r0";
-         multiple = TRUE;
-       }
-       if (data.instr.pop.reg_list & 2) {
-         if (multiple)
-           cout << ", ";
-         cout << "r1";
-         multiple = TRUE;
-       }
-       if (data.instr.pop.reg_list & 4) {
-         if (multiple)
-           cout << ", ";
-         cout << "r2";
-         multiple = TRUE;
-       }
-       if (data.instr.pop.reg_list & 8) {
-         if (multiple)
-           cout << ", ";
-         cout << "r3";
-         multiple = TRUE;
-       }
-       if (data.instr.pop.reg_list & 16) {
-         if (multiple)
-           cout << ", ";
-         cout << "r4";
-         multiple = TRUE;
-       }
-       if (data.instr.pop.reg_list & 32) {
-         if (multiple)
-           cout << ", ";
-         cout << "r5";
-         multiple = TRUE;
-       }
-       if (data.instr.pop.reg_list & 64) {
-         if (multiple)
-           cout << ", ";
-         cout << "r6";
-         multiple = TRUE;
-       }
-       if (data.instr.pop.reg_list & 128) {
-         if (multiple)
-           cout << ", ";
-         cout << "r7";
-         multiple = TRUE;
-       }
+       
+       multiple = printRegisterList(data.instr.pop.reg_list, multiple);
+       
        if (data.instr.pop.m) {
          if (multiple)
            cout << ", ";
@@ -350,19 +307,37 @@ int decode (const UNCOND_Type data) {
 }
 
 int decode (const LDM_Type data) {
-   cout << "LDM_TYPE" << endl;
+   unsigned int reg = data.instr.ldm.rn ;
+   
+   cout << "ldm r" << reg;
+   if((data.instr.ldm.reg_list & (1 << reg)) == 1) {
+      cout << "!, ";
+   }
+   else { 
+      cout <<  ", ";
+   }
+   
+   printRegisterList(data.instr.ldm.reg_list, FALSE);
+   
+   cout << endl;
 }
 
 int decode (const STM_Type data) {
-   cout << "STM_TYPE" << endl;
+   unsigned int reg = data.instr.stm.rn ;
+   
+   cout << "str r" << reg << "! ,";
+   
+   printRegisterList(data.instr.stm.reg_list, FALSE);
+   
+   cout << endl;
 }
 
 int decode (const LDRL_Type data) {
-   cout << "LDRL_TYPE" << endl;
+   cout << "ldrl r" << data.instr.ldrl.rt << ", #" << setbase(10) << data.instr.ldrl.rt * 4 << endl;
 }
 
 int decode (const ADD_SP_Type data) {
    if (opts.instrs) { 
-      cout << "add r" << data.instr.add.rd << ", sp, #" << data.instr.add.imm << endl;
+      cout << "add r" << data.instr.add.rd << ", sp, #" << setbase(10) << data.instr.add.imm << endl;
    }
 }
