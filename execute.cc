@@ -7,7 +7,7 @@
 #define PC rf[PC_REG]
 #define LR rf[LR_REG]
 #define SP rf[SP_REG]
-#define LOGGER 1
+#define LOGGER 0
 
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
@@ -17,6 +17,41 @@ unsigned int signExtend8to32ui(char i) {
    return static_cast<unsigned int>(static_cast<int>(i));
 }
 
+void updateFlagsRegisterAndImmediateValue(ALU_Type alu) {
+   int regValue = rf[alu.instr.cmp.rdn];
+   int immValue = alu.instr.cmp.imm;
+   int difference = regValue - immValue;
+
+   if(difference == 0) {
+      flags.Z = 1;
+   }
+   else {
+      flags.Z = 0;
+   }
+   //I do not think this can happen since arm is 16 bits
+   // This is a carry
+   if(FALSE) {
+      flags.C = 1;
+   }
+   else {
+      flags.C = 0;
+   }
+   
+   if(difference < 0) {
+      flags.N = 1;
+   }
+   else {
+      flags.N = 0;
+   }
+   //I do not think this can happen since arm is 16 bits
+   //This is overflow
+   if(FALSE) {
+      flags.V = 1;
+   }
+   else {
+      flags.V = 0;
+   }
+}
 ASPR flags;
 
 // You're given the code for evaluating BEQ, 
@@ -107,30 +142,31 @@ int countOneBits(unsigned int instruction) {
    
    for( ; instruction; counter++) {
          instruction = instruction & (instruction - 1);
-         counter++;
    }
 
    return counter;
 }
 
+//NOT SURE HOW TO HANDLE PUSH AND POP YET MATT
 void pushRegistersOntoStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list);
    unsigned int spAddress = SP - 4 * numberOfRegisters;
    // I think we need to write the link register here!
-   rf.write(LR_REG, SP);
+   // rf.write(LR_REG, SP);
    unsigned int i, mask;
    // why 14? pg167 I am using 8 because thumb has 
    // 8 registers in the list... hopefully
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.push.reg_list & mask) {
-         rf.write(spAddress, i);
+   //      rf.write(spAddress, i);
          spAddress += 4;
       }
    }
 
-   rf.write(SP_REG, SP - 4 * numberOfRegisters);
+   //rf.write(SP_REG, SP - 4 * numberOfRegisters);
 }
 
+//NOT SURE HOW TO HANDLE PUSH AND POP YET MATT
 void popRegistersOffOfStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list);
    unsigned int spAddress = SP;
@@ -140,7 +176,7 @@ void popRegistersOffOfStack(MISC_Type misc) {
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.pop.reg_list & mask) {
          // want to get the value at the address 
-         rf.write(i, spAddress);
+//         rf.write(i, spAddress);
          spAddress += 4;
       }
       /* PAGE 166, Do not think that it is needed but 
@@ -152,13 +188,17 @@ void popRegistersOffOfStack(MISC_Type misc) {
       */
    }
 
-   rf.write(SP_REG, SP + 4 * numberOfRegisters);
+ //  rf.write(SP_REG, SP + 4 * numberOfRegisters);
 }
+
 void execute() {
    Data16 instr = imem[PC];
    if(LOGGER) {
       cout << "\nPC: 0x" << setfill('0') << setw(8) << hex << PC << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
+      cout << "SP: " << SP  << "\n";
+      cout << "LR: " << LR << "\n";
    }
+      
    Thumb_Types itype;
    unsigned int pctarget = PC + 2;
    unsigned int addr;
@@ -220,7 +260,7 @@ void execute() {
                rf.write(alu.instr.mov.rdn, alu.instr.mov.imm);
                break;
             case ALU_CMP:
-               //Stephen NOT SURE HERE MATT
+               updateFlagsRegisterAndImmediateValue(alu);
                break;
             case ALU_ADD8I:
                rf.write(alu.instr.add8i.rdn, rf[alu.instr.add8i.rdn] + alu.instr.add8i.imm);
@@ -291,17 +331,21 @@ void execute() {
          break;
       case UNCOND:
          decode(uncond);
+         rf.write(PC_REG, PC + 2 * signExtend8to32ui(cond.instr.b.imm) + 2);
          break;
       case LDM:
+         //Stephen not sure and not need for fib
          decode(ldm);
          break;
       case STM:
+         //Stephen not sure and not need for fib
          decode(stm);
          break;
       case LDRL:
          //Stephen
          decode(ldrl);
-         rf.write(ldrl.instr.ldrl.rt, SP + (ldrl.instr.ldrl.imm*4));
+         addr = SP + (ldrl.instr.ldrl.imm*4);
+         rf.write(ldrl.instr.ldrl.rt, dmem[addr]);
          break;
       case ADD_SP:
          decode(addsp);
@@ -312,4 +356,10 @@ void execute() {
          exit(1);
          break;
    }
+   
+      if(LOGGER) {
+         for(int i = 0; i < 16; i++) {
+            cout << "Register " << i << ": " << rf[i]<< endl;
+         }
+      }
 }
