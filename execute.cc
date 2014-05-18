@@ -7,7 +7,7 @@
 #define PC rf[PC_REG]
 #define LR rf[LR_REG]
 #define SP rf[SP_REG]
-#define LOGGER 1
+#define LOGGER 0
 
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
@@ -166,7 +166,7 @@ void pushRegistersOntoStack(MISC_Type misc) {
       }
    }
 
-   rf.write(SP_REG, SP - 4 * numberOfRegisters);
+   rf.write(SP_REG, SP - 4 * numberOfRegisters - 4);
 }
 
 
@@ -191,7 +191,7 @@ void popRegistersOffOfStack(MISC_Type misc) {
       */
    }
 
-   rf.write(SP_REG, SP + 4 * numberOfRegisters);
+   rf.write(SP_REG, SP + 4 * numberOfRegisters + 4);
    rf.write(PC_REG, LR);
 }
 
