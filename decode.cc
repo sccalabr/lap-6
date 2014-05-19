@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include "thumbsim.hpp"
-
 using namespace std;
 
 
@@ -72,7 +71,7 @@ bool printRegisterList(unsigned int reg_list, bool multiple) {
        return multiple;
 }
 
-// Putting decodes here caused segfaults?
+
 Thumb_Types decode (const ALL_Types data) {
 
    if (data.type.alu.instr.class_type.type_check == ALU_TYPE) {
@@ -107,19 +106,14 @@ Thumb_Types decode (const ALL_Types data) {
    }
    else {
       if (data.type.ld_st.instr.class_type.opA == LD_ST_REG_OPA) {
-      cout << "add 11\n";
       }
       else if (data.type.ld_st.instr.class_type.opA == LD_ST_IMM_OPA) {
-      cout << "add 12\n";
       }
       else if (data.type.ld_st.instr.class_type.opA == LD_ST_IMMB_OPA) {
-      cout << "add 13\n";
       }
       else if (data.type.ld_st.instr.class_type.opA == LD_ST_IMMH_OPA) {
-      cout << "add 14\n";
       }
       else if (data.type.ld_st.instr.class_type.opA == LD_ST_IMMSP_OPA) {
-      cout << "add 15\n";
       }
       else {
          cout << "The type is: " <<  data.type.ld_st.instr.class_type.opA << endl;
@@ -132,13 +126,19 @@ Thumb_Types decode (const ALL_Types data) {
 
 ALU_Ops decode (const ALU_Type data) {
    if (data.instr.lsli.op == ALU_LSLI_OP) {
-      cout << "lsrs r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << data.instr.lsli.imm << endl;
+      if (opts.instrs) {     
+         cout << "lsrs r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << data.instr.lsli.imm << endl;
+      }
    }
    else if (data.instr.lsri.op == ALU_LSRI_OP) {
-      cout << "lsrs r" << data.instr.lsri.rd << ", r" << data.instr.lsri.rd << ", #" << data.instr.lsri.imm << endl;
+      if (opts.instrs) {
+         cout << "lsrs r" << data.instr.lsri.rd << ", r" << data.instr.lsri.rd << ", #" << data.instr.lsri.imm << endl;
+      }
    }
    else if (data.instr.asri.op == ALU_ASRI_OP) {
-      cout << "asrs r" << data.instr.asri.rd << ", r" << data.instr.asri.rd << ", #" << data.instr.asri.imm << endl;
+      if (opts.instrs) {
+         cout << "asrs r" << data.instr.asri.rd << ", r" << data.instr.asri.rd << ", #" << data.instr.asri.imm << endl;
+      }
    }
    else if (data.instr.addr.op == ALU_ADDR_OP) {
       if (opts.instrs) { 
@@ -147,8 +147,9 @@ ALU_Ops decode (const ALU_Type data) {
       return ALU_ADDR;
    }
    else if (data.instr.subr.op == ALU_SUBR_OP) {
-      cout << "subs r\n" << data.instr.subr.rd  << ", r" << data.instr.subr.rn << ", r" << data.instr.subr.rm << endl;
-
+      if (opts.instrs) {
+         cout << "subs r\n" << data.instr.subr.rd  << ", r" << data.instr.subr.rn << ", r" << data.instr.subr.rm << endl;
+      }
    }
    else if (data.instr.add3i.op == ALU_ADD3I_OP) {
       if (opts.instrs) { 
@@ -157,7 +158,9 @@ ALU_Ops decode (const ALU_Type data) {
       return ALU_ADD3I;
    }
    else if (data.instr.sub3i.op == ALU_SUB3I_OP) {
-      cout << "subs r" << data.instr.sub3i.rd << ", r" << data.instr.sub3i.rn << ", #" << data.instr.sub3i.imm << endl;
+      if (opts.instrs) {
+         cout << "subs r" << data.instr.sub3i.rd << ", r" << data.instr.sub3i.rn << ", #" << data.instr.sub3i.imm << endl;
+      }
    }
    else if (data.instr.add8i.op == ALU_ADD8I_OP) {
       if (opts.instrs) { 
@@ -166,7 +169,9 @@ ALU_Ops decode (const ALU_Type data) {
       return ALU_ADD8I;
    }
    else if (data.instr.sub8i.op == ALU_SUB8I_OP) {
-        cout << "subs r" << data.instr.sub8i.rdn << ", #" << data.instr.sub8i.imm << endl;
+      if (opts.instrs) {
+         cout << "subs r" << data.instr.sub8i.rdn << ", #" << data.instr.sub8i.imm << endl;
+      }
    }
    else if (data.instr.cmp.op == ALU_CMP_OP) { 
       if (opts.instrs) { 
@@ -208,7 +213,20 @@ SP_Ops decode (const SP_Type data) {
 }
 LD_ST_Ops decode (const LD_ST_Type data) {
    if (data.instr.class_type.opA == LD_ST_REG_OPA) {
-         cout << "add 22";
+      if (data.instr.class_type.opB == LD_ST_OPB_STR) {
+         if (opts.instrs) { 
+            cout << "str r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ", r" << (data.instr.ld_st_reg.rm) << "]" << endl;
+         }
+         //NOT SURE IF RIGHT RETURN CODE
+         return STRR;
+      }
+      else if (data.instr.class_type.opB == LD_ST_OPB_LDR) {
+         if (opts.instrs) { 
+            cout << "ldr r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ", r" << (data.instr.ld_st_reg.rm) << "]" << endl;
+         }
+         //NOT SURE IF RIGHT RETURN CODE
+         return LDRR;
+      }
    }
    else if (data.instr.class_type.opA == LD_ST_IMM_OPA) {
       if (data.instr.class_type.opB == LD_ST_OPB_STR) {
@@ -225,13 +243,13 @@ LD_ST_Ops decode (const LD_ST_Type data) {
       }
    }
    else if (data.instr.class_type.opA == LD_ST_IMMB_OPA) {
-   cout << "add 23\n";
+   cout << "==>add 23\n";
    }
    else if (data.instr.class_type.opA == LD_ST_IMMH_OPA) {
-   cout << "add 24\n";
+   cout << "==>add 24\n";
    }
    else if (data.instr.class_type.opA == LD_ST_IMMSP_OPA) {
-   cout << "add 25\n";
+   cout << "==>add 25\n";
    }
 }
 MISC_Ops decode (const MISC_Type data) {
@@ -308,36 +326,45 @@ int decode (const UNCOND_Type data) {
 
 int decode (const LDM_Type data) {
    unsigned int reg = data.instr.ldm.rn ;
-   
-   cout << "ldm r" << reg;
-   if((data.instr.ldm.reg_list & (1 << reg)) == 1) {
-      cout << "!, ";
+   if (opts.instrs) {
+      cout << "ldm r" << reg;
+      if((data.instr.ldm.reg_list & (1 << reg)) == 1) {
+         cout << "!, ";
+      }
+      else { 
+         cout <<  ", ";
+      }
+      
+      printRegisterList(data.instr.ldm.reg_list, FALSE);
+      
+      cout << endl;
    }
-   else { 
-      cout <<  ", ";
-   }
-   
-   printRegisterList(data.instr.ldm.reg_list, FALSE);
-   
-   cout << endl;
+   return LDM_TYPE;
 }
 
 int decode (const STM_Type data) {
    unsigned int reg = data.instr.stm.rn ;
-   
-   cout << "str r" << reg << "! ,";
-   
-   printRegisterList(data.instr.stm.reg_list, FALSE);
-   
-   cout << endl;
+  
+   if (opts.instrs)    {
+      cout << "str r" << reg << "! ,";
+      
+      printRegisterList(data.instr.stm.reg_list, FALSE);
+      
+      cout << endl;
+   }
+   return STM_TYPE;
 }
 
 int decode (const LDRL_Type data) {
-   cout << "ldrl r" << data.instr.ldrl.rt << ", #" << setbase(10) << data.instr.ldrl.rt * 4 << endl;
+   if (opts.instrs)
+      cout << "ldrl r" << data.instr.ldrl.rt << ", #" << setbase(10) << data.instr.ldrl.rt * 4 << endl;
+   
+   return LDRL_TYPE;
 }
 
 int decode (const ADD_SP_Type data) {
    if (opts.instrs) { 
       cout << "add r" << data.instr.add.rd << ", sp, #" << setbase(10) << data.instr.add.imm << endl;
    }
+   return ADD_SP_TYPE;
 }
