@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include "thumbsim.hpp"
+#define BL_TYPE 30
+#include <cstring>
 using namespace std;
 
 
@@ -73,7 +75,8 @@ bool printRegisterList(unsigned int reg_list, bool multiple) {
 
 
 Thumb_Types decode (const ALL_Types data) {
-
+      Data16 instr;
+      memcpy(&instr, &data, sizeof(Data16));
    if (data.type.alu.instr.class_type.type_check == ALU_TYPE) {
       return ALU;
    }
@@ -115,7 +118,11 @@ Thumb_Types decode (const ALL_Types data) {
       }
       else if (data.type.ld_st.instr.class_type.opA == LD_ST_IMMSP_OPA) {
       }
-      else {
+      //THIS IS A HACK BECAUSE BL DOES NOT SEEM TO BE HANDLED...
+     /*else if((instr.data_ushort() & (0xF8 << 8)) >> 11 == 0x1E) {
+         return BL;
+      }
+      */else {
          cout << "The type is: " <<  data.type.ld_st.instr.class_type.opA << endl;
          cout << "NO TYPE FOUND" << endl;
          return ERROR_TYPE;
@@ -129,16 +136,19 @@ ALU_Ops decode (const ALU_Type data) {
       if (opts.instrs) {     
          cout << "lsrs r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << data.instr.lsli.imm << endl;
       }
+      return ALU_LSLI;
    }
    else if (data.instr.lsri.op == ALU_LSRI_OP) {
       if (opts.instrs) {
          cout << "lsrs r" << data.instr.lsri.rd << ", r" << data.instr.lsri.rd << ", #" << data.instr.lsri.imm << endl;
       }
+      return ALU_LSRI;
    }
    else if (data.instr.asri.op == ALU_ASRI_OP) {
       if (opts.instrs) {
          cout << "asrs r" << data.instr.asri.rd << ", r" << data.instr.asri.rd << ", #" << data.instr.asri.imm << endl;
       }
+      return ALU_ASRI;
    }
    else if (data.instr.addr.op == ALU_ADDR_OP) {
       if (opts.instrs) { 
@@ -150,6 +160,7 @@ ALU_Ops decode (const ALU_Type data) {
       if (opts.instrs) {
          cout << "subs r\n" << data.instr.subr.rd  << ", r" << data.instr.subr.rn << ", r" << data.instr.subr.rm << endl;
       }
+      return ALU_SUBR;
    }
    else if (data.instr.add3i.op == ALU_ADD3I_OP) {
       if (opts.instrs) { 
@@ -161,6 +172,7 @@ ALU_Ops decode (const ALU_Type data) {
       if (opts.instrs) {
          cout << "subs r" << data.instr.sub3i.rd << ", r" << data.instr.sub3i.rn << ", #" << data.instr.sub3i.imm << endl;
       }
+      return ALU_SUB3I;
    }
    else if (data.instr.add8i.op == ALU_ADD8I_OP) {
       if (opts.instrs) { 
@@ -172,6 +184,7 @@ ALU_Ops decode (const ALU_Type data) {
       if (opts.instrs) {
          cout << "subs r" << data.instr.sub8i.rdn << ", #" << data.instr.sub8i.imm << endl;
       }
+      return ALU_SUB8I;
    }
    else if (data.instr.cmp.op == ALU_CMP_OP) { 
       if (opts.instrs) { 
@@ -316,12 +329,14 @@ int decode (const COND_Type data) {
       printCond(data.instr.b.cond);
       cout << " 0x" << hex << data.instr.b.imm << endl;
    }
+   return COND_TYPE;
 }
 
 int decode (const UNCOND_Type data) {
    if (opts.instrs) { 
       cout << "b 0x" << hex << data.instr.b.imm << endl;
    }
+   return UNCOND_TYPE;
 }
 
 int decode (const LDM_Type data) {
