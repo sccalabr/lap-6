@@ -8,6 +8,7 @@
 #define LR rf[LR_REG]
 #define SP rf[SP_REG]
 #define LOGGER 0
+#define BL_TYPE 30
 
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
@@ -169,7 +170,6 @@ void pushRegistersOntoStack(MISC_Type misc) {
    rf.write(SP_REG, SP - 4 * numberOfRegisters - 4);
 }
 
-
 void popRegistersOffOfStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list);
    unsigned int spAddress = SP;
@@ -193,6 +193,13 @@ void popRegistersOffOfStack(MISC_Type misc) {
 
    rf.write(SP_REG, SP + 4 * numberOfRegisters + 4);
    rf.write(PC_REG, LR);
+}
+
+void handleBranchAndLink(Data16 instr) {
+   //Should be the address of the next instruction
+   rf.write(LR, PC - 4);
+   //dont think this is right
+   rf.write(PC_REG, PC + 2 * signExtend8to32ui(instr.data_ushort() & 0x3FF) + 2);
 }
 
 void execute() {
@@ -220,6 +227,7 @@ void execute() {
    STM_Type stm(instr);
    LDRL_Type ldrl(instr);
    ADD_SP_Type addsp(instr);
+   BL_Type bl(instr);
 
    ALU_Ops add_ops;
    DP_Ops dp_ops;
@@ -263,7 +271,7 @@ void execute() {
             case ALU_MOV:
                rf.write(alu.instr.mov.rdn, alu.instr.mov.imm);
                break;
-            case ALU_CMP:
+            case ALU_CMP: 
                updateFlagsRegisterAndImmediateValue(alu);
                break;
             case ALU_ADD8I:
@@ -335,7 +343,7 @@ void execute() {
          break;
       case UNCOND:
          decode(uncond);
-         rf.write(PC_REG, PC + 2 * signExtend8to32ui(cond.instr.b.imm) + 2);
+         rf.write(PC_REG, PC + 2 * signExtend8to32ui(uncond.instr.b.imm) + 2);
          break;
       case LDM:
          //Stephen not sure and not need for fib
@@ -354,6 +362,9 @@ void execute() {
       case ADD_SP:
          decode(addsp);
          rf.write(addsp.instr.add.rd, SP + (addsp.instr.add.imm*4));
+         break;
+      case BL:
+         handleBranchAndLink(instr);
          break;
       default:
          cout << "[ERROR] Unknown Instruction to be executed" << endl;
