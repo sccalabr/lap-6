@@ -75,14 +75,12 @@ bool printRegisterList(unsigned int reg_list, bool multiple) {
 
 
 Thumb_Types decode (const ALL_Types data) {
-      Data16 instr;
-      memcpy(&instr, &data, sizeof(Data16));
    if (data.type.alu.instr.class_type.type_check == ALU_TYPE) {
       return ALU;
    }
    else if (data.type.dp.instr.class_type.type_check == DP_TYPE) {
       return DP;
-   }
+   }//cmpr is a special type
    else if (data.type.sp.instr.class_type.type_check == SP_TYPE) {
       return SPECIAL;
    }
@@ -107,6 +105,9 @@ Thumb_Types decode (const ALL_Types data) {
    else if (data.type.addsp.instr.class_type.type_check == ADD_SP_TYPE) {
       return ADD_SP;
    }
+   else if(data.type.bl.instr.class_type.type_check == BL_TYPE) {
+      return BL;
+   }
    else {
       if (data.type.ld_st.instr.class_type.opA == LD_ST_REG_OPA) {
       }
@@ -118,11 +119,7 @@ Thumb_Types decode (const ALL_Types data) {
       }
       else if (data.type.ld_st.instr.class_type.opA == LD_ST_IMMSP_OPA) {
       }
-      //THIS IS A HACK BECAUSE BL DOES NOT SEEM TO BE HANDLED...
-     /*else if((instr.data_ushort() & (0xF8 << 8)) >> 11 == 0x1E) {
-         return BL;
-      }
-      */else {
+      else {
          cout << "The type is: " <<  data.type.ld_st.instr.class_type.opA << endl;
          cout << "NO TYPE FOUND" << endl;
          return ERROR_TYPE;
@@ -200,8 +197,76 @@ ALU_Ops decode (const ALU_Type data) {
    }
 
 }
+
+//page 86
 DP_Ops decode (const DP_Type data) {
-   cout << "DP_TYPE" << endl;
+   if(data.instr.dp.op == 0x0){
+      // bit and
+      return DP_AND;
+   }
+   else if(data.instr.dp.op == 0x01) {
+      // bit xor
+      return DP_EOR;
+   }
+   else if(data.instr.dp.op == 0x02) {
+      // bit lsl reg
+      return DP_LSL;
+   }
+   else if(data.instr.dp.op == 0x03) {
+      // bit lsr reg
+      return DP_LSR;
+   }
+   else if(data.instr.dp.op == 0x04) {
+      // bit asr reg
+      return DP_ASR;
+   }
+   else if(data.instr.dp.op == 0x05) {
+      // bit adc reg
+      return DP_ADC;
+   }
+   else if(data.instr.dp.op == 0x06) {
+      // bit sbc reg
+      return DP_SBC;
+   }
+   else if(data.instr.dp.op == 0x07) {
+      // bit ror reg
+      return DP_RSB;
+   }
+   else if(data.instr.dp.op == 0x08) {
+      // bit TST set flags on bit and
+      return DP_TST;
+   }
+   else if(data.instr.dp.op == 0x09) {
+      // bit revse sub from 0
+      return DP_RSB;
+   }
+   else if(data.instr.dp.op == 0x0a) {
+      // bit cmp regs
+      cout<< "MATT BAGUE IM DONE FOR TONIGHT!!!\n";
+      exit(1);
+      return DP_CMP;
+   }
+   else if(data.instr.dp.op == 0x0b) {
+      // bit cmp neg reg
+      return DP_CMN;
+   }
+   else if(data.instr.dp.op == 0x0c) {
+      // bit or
+      return DP_ORR;
+   }
+   else if(data.instr.dp.op == 0x0d) {
+      // bit mult two reg
+      return DP_MUL;
+   }
+   else if(data.instr.dp.op == 0x0e) {
+      // bit clear
+      return DP_BIC;
+   }    
+   else if(data.instr.dp.op == 0x0f) {
+      // bit not
+      return DP_MVN;
+   }
+
 }
 
 SP_Ops decode (const SP_Type data) {
@@ -216,6 +281,10 @@ SP_Ops decode (const SP_Type data) {
          }
       }
       return SP_MOV;
+   }//using cmp reg on page 129 encoding 2
+   else if(data.instr.cmp.op == 1) {
+      cout << "CMPR !!!!\n";
+      return SP_CMPR;
    }
    else {
       if (opts.instrs) { 
@@ -361,11 +430,11 @@ int decode (const STM_Type data) {
    unsigned int reg = data.instr.stm.rn ;
   
    if (opts.instrs)    {
-      cout << "str r" << reg << "! ,";
+      cout << "str r" << reg << "!, {";
       
       printRegisterList(data.instr.stm.reg_list, FALSE);
       
-      cout << endl;
+      cout << "}" << endl;
    }
    return STM_TYPE;
 }
@@ -379,7 +448,7 @@ int decode (const LDRL_Type data) {
 
 int decode (const ADD_SP_Type data) {
    if (opts.instrs) { 
-      cout << "add r" << data.instr.add.rd << ", sp, #" << setbase(10) << data.instr.add.imm << endl;
+      cout << "add r" << data.instr.add.rd << ", sp, #" << setbase(10) << data.instr.add.imm * 4 << endl;
    }
    return ADD_SP_TYPE;
 }
