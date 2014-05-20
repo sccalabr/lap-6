@@ -16,7 +16,7 @@ using namespace std;
 /* Defines for types and ops for decoding */
 #define ALU_TYPE 0
 #define SP_TYPE 17
-#define DP_TYPE 32
+#define DP_TYPE 16 // This use to be 32 but on page 86 dp type is 16
 #define LD_ST_REG_OPA 5
 #define LD_ST_OPB_STR 0
 #define LD_ST_OPB_STRH 1
@@ -33,6 +33,7 @@ using namespace std;
 #define LD_ST_ST 0
 #define LD_ST_LD 1
 #define UNCOND_TYPE 28
+#define BL_TYPE 30
 #define ADD_SP_TYPE 21
 #define ALU_LSLI_OP 0
 #define ALU_LSRI_OP 1
@@ -120,6 +121,13 @@ struct ALU_Type {
    } instr;
 };
 
+struct DP_Instr{
+   unsigned short rdn: 3;
+   unsigned short rm: 3;
+   unsigned short op: 4;
+   unsigned short type: 6;
+};
+
 struct DP_Type {
    union {
       unsigned short mem;
@@ -128,12 +136,7 @@ struct DP_Type {
          unsigned short type_check: 6;
       } class_type;
       /* All Data Processing Types follow this format */
-      struct {
-         unsigned short rdn: 3;
-         unsigned short rm: 3;
-         unsigned short op: 4;
-         unsigned short type: 6;
-      } DP_Instr;
+      DP_Instr dp;
    } instr; 
 };
 
@@ -146,7 +149,15 @@ struct SP_ADD_Instr {
    unsigned short type: 6;
 };
 
-typedef SP_ADD_Instr SP_CMP_Instr;
+struct SP_CMP_Instr {
+   unsigned short rd: 3;
+   unsigned short rm: 4;
+   unsigned short d: 1;
+   unsigned short op: 2;
+   unsigned short type: 6;
+};
+
+
 typedef SP_ADD_Instr SP_MOV_Instr;
 
 struct SP_BX_Instr {
@@ -309,6 +320,7 @@ struct STM_Type {
    } instr;
 };
 
+
 /* LD Multiple Type*/
 struct LDM_Instr {
    unsigned short reg_list: 8;
@@ -331,6 +343,7 @@ struct UNCOND_B_Instr {
    unsigned short imm: 11;
    unsigned short op: 5;
 };
+
 
 struct UNCOND_Type {
    union {
@@ -358,6 +371,24 @@ struct ADD_SP_Type {
    } instr; 
 };
 
+/* BRANCH BL TYPE */
+struct BL_Instr {
+   unsigned short imm: 10;
+   unsigned s: 1;
+   unsigned short op: 5;
+};
+
+
+struct BL_Type {
+   union {
+      struct {
+         unsigned short data: 11;
+         unsigned short type_check: 5;
+      } class_type;
+      BL_Instr bl;
+   } instr; 
+};
+
 class ALL_Types{ 
    public:
       union {
@@ -373,6 +404,7 @@ class ALL_Types{
          STM_Type stm;
          LDRL_Type ldrl;
          ADD_SP_Type addsp;
+         BL_Type bl;
       } type;
       ALL_Types() {}
       ALL_Types(const unsigned short & _type) {type.mem = _type;}
@@ -430,6 +462,7 @@ class Data16 {
          STM_Type stm;
          LDRL_Type ldrl;
          ADD_SP_Type addsp;
+         BL_Type bl;
       } d;
    public:
       Data16() {}
@@ -477,6 +510,7 @@ class Data16 {
       operator STM_Type() const { return d.stm; }
       operator LDRL_Type() const { return d.ldrl; }
       operator ADD_SP_Type() const { return d.addsp; }
+      operator BL_Type() const { return d.bl; }
 };
 
 class Data32 {
@@ -674,6 +708,7 @@ typedef enum Thumb_Types {
    STM,
    LDRL,
    ADD_SP,
+   BL,
    ERROR_TYPE
 } Thumb_Types;
 
@@ -715,7 +750,8 @@ typedef enum SP_Ops {
    SP_CMP,
    SP_MOV,
    SP_BX,
-   SP_BLX
+   SP_BLX,
+   SP_CMPR
 } SP_Ops;
 
 typedef enum LD_ST_Ops {
@@ -788,5 +824,6 @@ int decode (const LDM_Type);
 int decode (const STM_Type);
 int decode (const LDRL_Type);
 int decode (const ADD_SP_Type);
+int decode (const BL_Type);
 void execute();  
 #endif
