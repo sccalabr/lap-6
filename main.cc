@@ -1,11 +1,15 @@
 #include "thumbsim.hpp"
 #include "unistd.h"
 
+#define DEFAULT_CACHE_SIZE 256
+
 Memory<Data16,Data16> imem(0x8000);
 Memory<Data8,Data32> dmem(0xffff0000);
 Memory<Data32,Data32> rf(16, Data32(0));
 Register pc;
 Options opts;
+Caches caches = Caches(DEFAULT_CACHE_SIZE);
+Stats stats;
 
 int main(int argc, char ** argv) {
   int c;
@@ -28,7 +32,7 @@ int main(int argc, char ** argv) {
       opts.stats = true;
       break;
     case 'c':
-      //caches = Caches(atoi(optarg));
+      caches = Caches(atoi(optarg));
       break;
     case 'f':
       filename = optarg;
@@ -52,6 +56,7 @@ int main(int argc, char ** argv) {
   cout << "Starting at PC " << hex << pc << endl;
   rf.write(15, pc);
   while(imem.inRange(rf[15])) {
+    caches.access(rf[15]); 
     execute();
   }
 
@@ -63,8 +68,8 @@ int main(int argc, char ** argv) {
   }
 
   if (opts.stats) {
-    //stats.print();
-    //caches.printStats();
+    stats.print();
+    caches.printStats();
   }
 
   return 0;
