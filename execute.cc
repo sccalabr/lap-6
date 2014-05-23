@@ -10,6 +10,8 @@
 #define LOGGER 0
 #define BL_TYPE 30
 
+ASPR flags;
+
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
 }
@@ -53,7 +55,7 @@ void updateFlagsRegisterAndImmediateValue(ALU_Type alu) {
       flags.V = 0;
    }
 }
-ASPR flags;
+
 
 // You're given the code for evaluating BEQ, 
 // and you'll need to fill in the rest of these.
@@ -201,6 +203,91 @@ void handleBranchAndLink(Data16 instr) {
    //dont think this is right
    rf.write(PC_REG, PC + 2 * signExtend8to32ui(instr.data_ushort() & 0x3FF) + 2);
 }
+// not sure how to handle overflow bit so ignoring for now.
+void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
+   int result;
+   /*if(dp_ops == DP_AND) {
+      result = rf[dp.instr.dp.rnd] & rf[dp.instr.dp.m];
+      rf.write(dp.instr.dp.rnd, result)
+      updateFlags(results);
+   }
+   else if(dp_ops == DP_EOR) {
+      result = rf[dp.instr.dp.rnd] ^ rf[dp.instr.dp.m];
+      rf.write(dp.instr.dp.rnd, result)
+      updateFlags(results);
+   }
+   else if(dp_ops == DP_LSL) {
+      result = rf[dp.instr.dp.rnd] << (rf[dp.instr.dp.m] & 0xFF);
+      rf.write(dp.instr.dp.rnd, result)
+      updateFlags(results);
+   }
+   else if(dp_ops == DP_LSR) {
+      result = rf[dp.instr.dp.rnd] >> (rf[dp.instr.dp.m] & 0xFF);
+      rf.write(dp.instr.dp.rnd, result)
+      updateFlags(results);
+   }
+   else if(dp_ops == DP_ASR) {
+   }
+   else if(dp_ops == DP_ADC) {
+   }
+   else if(dp_ops == DP_SBC) {
+   }
+   else if(dp_ops == D_ROR) {
+   }
+   else if(dp_ops == DP_TST) {
+   }
+   else if(dp_ops == DP_RSB) {
+   }
+   else*/ if(dp_ops == DP_CMP) {
+      int arg1 = rf[dp.instr.dp.rdn];
+      int arg2 = rf[dp.instr.dp.rm];
+      result = arg1 - arg2;
+      
+      cout << arg1 << "   " << arg2 << endl; 
+      
+      if(result < 0) {
+         flags.N = 1;
+      }
+      else {
+         flags.N = 0;
+      }
+      
+      if(result == 0) {
+         flags.Z = 1;
+      }
+      else {
+         flags.Z = 0;
+      }
+      //NOT SURE ABOUT OVERFLOW AND CARRY
+      if(FALSE) {
+         flags.C = 1;
+      }
+      else {
+         flags.C = 0;
+      }
+      
+      if(FALSE) {
+         flags.V = 1;
+      }
+      else{
+         flags.V = 0;
+      }
+   }
+   /*else if(dp_ops == DP_CMN) {
+   }
+   else if(dp_ops == DP_ORR) {
+   }
+   else if(dp_ops == DP_MUL) {
+   }
+   else if(dp_ops == DP_BIC) {
+   }
+   else if(dp_ops == DP_MVN) {
+   }
+*/
+   else {
+      cout <<" ===== NEED TO IMPLEMENT SOME DP_TYPES ======\n";
+   }
+}
 
 void execute() {
    Data16 instr = imem[PC];
@@ -286,8 +373,9 @@ void execute() {
          }
          break;
       case DP:
-         decode(dp);
-         break;
+         dp_ops = decode(dp);
+         handleDPOps(dp_ops, dp);
+         
       case SPECIAL:
          sp_ops = decode(sp);
          switch(sp_ops) {
@@ -348,11 +436,20 @@ void execute() {
       case LDM:
          //Stephen not sure and not need for fib
          decode(ldm);
+
          break;
-      case STM:
-         //Stephen not sure and not need for fib
-         decode(stm);
-         break;
+      case STM: // not sure if it is right
+      {   decode(stm);
+         int counter = 0;
+         for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
+            if(misc.instr.push.reg_list & mask) {
+               dmem.write(rf[stm.instr.stm.rn] + counter, rf[i]);
+               counter += 4;
+            }
+         }  
+         // may not need to write back pg 175
+         rf.write(stm.instr.stm.rn, stm.instr.stm.rn + 4 * countOneBits(stm.instr.stm.reg_list));
+      }   break;
       case LDRL:
          //Stephen
          decode(ldrl);
@@ -368,7 +465,7 @@ void execute() {
          break;
       default:
          cout << "[ERROR] Unknown Instruction to be executed" << endl;
-         exit(1);
+         //exit(1);
          break;
    }
    
