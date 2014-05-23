@@ -201,69 +201,99 @@ ALU_Ops decode (const ALU_Type data) {
 //page 86
 DP_Ops decode (const DP_Type data) {
    if(data.instr.dp.op == 0x0){
-      // bit and
+      if (opts.instrs) { 
+         cout << "ands r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_AND;
    }
    else if(data.instr.dp.op == 0x01) {
-      // bit xor
+      if (opts.instrs) { 
+         cout << "eors r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_EOR;
    }
    else if(data.instr.dp.op == 0x02) {
-      // bit lsl reg
+      if (opts.instrs) { 
+         cout << "lsls r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_LSL;
    }
    else if(data.instr.dp.op == 0x03) {
-      // bit lsr reg
+      if (opts.instrs) { 
+         cout << "lsrs r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_LSR;
    }
    else if(data.instr.dp.op == 0x04) {
-      // bit asr reg
+      if (opts.instrs) { 
+         cout << "arsr r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_ASR;
    }
    else if(data.instr.dp.op == 0x05) {
-      // bit adc reg
+      if (opts.instrs) { 
+         cout << "adcs r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_ADC;
    }
    else if(data.instr.dp.op == 0x06) {
-      // bit sbc reg
+      if (opts.instrs) { 
+         cout << "sbcs r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_SBC;
    }
    else if(data.instr.dp.op == 0x07) {
-      // bit ror reg
+      if (opts.instrs) { 
+         cout << "rsbs r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_RSB;
    }
    else if(data.instr.dp.op == 0x08) {
-      // bit TST set flags on bit and
+      if (opts.instrs) { 
+         cout << "tsts r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_TST;
    }
    else if(data.instr.dp.op == 0x09) {
-      // bit revse sub from 0
+      if (opts.instrs) { 
+         cout << "rsbs r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_RSB;
    }
    else if(data.instr.dp.op == 0x0a) {
-      // bit cmp regs
-      cout<< "MATT BAGUE IM DONE FOR TONIGHT!!!\n";
-      exit(1);
+      if (opts.instrs) { 
+         cout << "cmp r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_CMP;
    }
    else if(data.instr.dp.op == 0x0b) {
-      // bit cmp neg reg
+      if (opts.instrs) { 
+         cout << "cmn r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_CMN;
    }
    else if(data.instr.dp.op == 0x0c) {
-      // bit or
+      if (opts.instrs) { 
+         cout << "orrs r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_ORR;
    }
    else if(data.instr.dp.op == 0x0d) {
-      // bit mult two reg
+      if (opts.instrs) { 
+         cout << "muls r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_MUL;
    }
    else if(data.instr.dp.op == 0x0e) {
-      // bit clear
+      if (opts.instrs) { 
+         cout << "bics r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_BIC;
    }    
    else if(data.instr.dp.op == 0x0f) {
-      // bit not
+      if (opts.instrs) { 
+         cout << "mvns r" << data.instr.dp.rdn << ", r" << data.instr.dp.rm  << endl;
+      }
       return DP_MVN;
    }
 
@@ -283,7 +313,7 @@ SP_Ops decode (const SP_Type data) {
       return SP_MOV;
    }//using cmp reg on page 129 encoding 2
    else if(data.instr.cmp.op == 1) {
-      cout << "CMPR !!!!\n";
+      cout << "cmp r" << data.instr.cmp.rd << ", " << data.instr.cmp.rm <<endl ;
       return SP_CMPR;
    }
    else {
@@ -428,9 +458,9 @@ int decode (const LDM_Type data) {
 
 int decode (const STM_Type data) {
    unsigned int reg = data.instr.stm.rn ;
-  
+
    if (opts.instrs)    {
-      cout << "str r" << reg << "!, {";
+      cout << "stmia r" << reg << "!, {";
       
       printRegisterList(data.instr.stm.reg_list, FALSE);
       
