@@ -15,12 +15,14 @@ DP_Ops decode (const DP_Type);
 SP_Ops decode (const SP_Type);
 LD_ST_Ops decode (const LD_ST_Type);
 MISC_Ops decode (const MISC_Type);
+BL_Ops decode (const BL_Type);
 int decode (const COND_Type);
 int decode (const UNCOND_Type);
 int decode (const LDM_Type);
 int decode (const STM_Type);
 int decode (const LDRL_Type);
 int decode (const ADD_SP_Type);
+
 
 bool printRegisterList(unsigned int reg_list, bool multiple) {
        if (reg_list & 1) {
@@ -105,8 +107,8 @@ Thumb_Types decode (const ALL_Types data) {
    else if (data.type.addsp.instr.class_type.type_check == ADD_SP_TYPE) {
       return ADD_SP;
    }
-   else if(data.type.bl.instr.class_type.type_check == BL_TYPE) {
-      return BL;
+   else if (data.type.bl.instr.class_type.type_check == BL_TYPE) {
+    return BL;
    }
    else {
       if (data.type.ld_st.instr.class_type.opA == LD_ST_REG_OPA) {
@@ -481,4 +483,11 @@ int decode (const ADD_SP_Type data) {
       cout << "add r" << data.instr.add.rd << ", sp, #" << setbase(10) << data.instr.add.imm * 4 << endl;
    }
    return ADD_SP_TYPE;
+}
+
+BL_Ops decode (const BL_Type data) {
+  if (opts.instrs) { 
+    cout << "bl 0x" << hex << data.instr.bl_upper.imm10 << endl;
+  }
+  return BL_UPPER;
 }
