@@ -16,7 +16,7 @@ using namespace std;
 /* Defines for types and ops for decoding */
 #define ALU_TYPE 0
 #define SP_TYPE 17
-#define DP_TYPE 16 // This use to be 32 but on page 86 dp type is 16
+#define DP_TYPE 16
 #define LD_ST_REG_OPA 5
 #define LD_ST_OPB_STR 0
 #define LD_ST_OPB_STRH 1
@@ -30,10 +30,9 @@ using namespace std;
 #define LD_ST_IMMB_OPA 7
 #define LD_ST_IMMH_OPA 8
 #define LD_ST_IMMSP_OPA 9
-#define LD_ST_ST 0
-#define LD_ST_LD 1
+#define LD_ST_STB 14 
+#define LD_ST_LDB 15
 #define UNCOND_TYPE 28
-#define BL_TYPE 30
 #define ADD_SP_TYPE 21
 #define ALU_LSLI_OP 0
 #define ALU_LSRI_OP 1
@@ -56,6 +55,7 @@ using namespace std;
 #define MISC_SUB_OP 1
 #define MISC_POP_OP 6
 #define ADD_SP8I_TYPE 22
+#define BL_TYPE 30
 
 /* ALU Type Structs */
 struct ALU_LSLI_Instr {
@@ -121,13 +121,6 @@ struct ALU_Type {
    } instr;
 };
 
-struct DP_Instr{
-   unsigned short rdn: 3;
-   unsigned short rm: 3;
-   unsigned short op: 4;
-   unsigned short type: 6;
-};
-
 struct DP_Type {
    union {
       unsigned short mem;
@@ -136,7 +129,12 @@ struct DP_Type {
          unsigned short type_check: 6;
       } class_type;
       /* All Data Processing Types follow this format */
-      DP_Instr dp;
+      struct {
+         unsigned short rdn: 3;
+         unsigned short rm: 3;
+         unsigned short op: 4;
+         unsigned short type: 6;
+      } DP_Instr;
    } instr; 
 };
 
@@ -149,15 +147,7 @@ struct SP_ADD_Instr {
    unsigned short type: 6;
 };
 
-struct SP_CMP_Instr {
-   unsigned short rd: 3;
-   unsigned short rm: 4;
-   unsigned short d: 1;
-   unsigned short op: 2;
-   unsigned short type: 6;
-};
-
-
+typedef SP_ADD_Instr SP_CMP_Instr;
 typedef SP_ADD_Instr SP_MOV_Instr;
 
 struct SP_BX_Instr {
@@ -286,6 +276,31 @@ struct COND_Type {
    } instr;
 };
 
+struct BL_Lower_Instr {
+  unsigned short imm11: 11;
+  unsigned short j2: 1;
+  unsigned short bit1: 1;
+  unsigned short j1: 1;
+  unsigned short op1: 2;
+};
+
+struct BL_Upper_Instr {
+  unsigned short imm10: 10;
+  unsigned short s: 1;
+  unsigned short op2: 5;
+}; 
+
+struct BL_Type {
+   union {
+      struct {
+         unsigned short data: 11;
+         unsigned short type_check: 5;
+      } class_type;
+      BL_Upper_Instr bl_upper;
+      BL_Lower_Instr bl_lower;
+   } instr;
+};
+
 /* Literal Type */
 struct LDRL_Instr {
    unsigned short imm: 8;
@@ -320,7 +335,6 @@ struct STM_Type {
    } instr;
 };
 
-
 /* LD Multiple Type*/
 struct LDM_Instr {
    unsigned short reg_list: 8;
@@ -343,7 +357,6 @@ struct UNCOND_B_Instr {
    unsigned short imm: 11;
    unsigned short op: 5;
 };
-
 
 struct UNCOND_Type {
    union {
@@ -368,24 +381,6 @@ struct ADD_SP_Type {
          unsigned short type_check: 5;
       } class_type;
       ADD_SP_Instr add;
-   } instr; 
-};
-
-/* BRANCH BL TYPE */
-struct BL_Instr {
-   unsigned short imm: 10;
-   unsigned s: 1;
-   unsigned short op: 5;
-};
-
-
-struct BL_Type {
-   union {
-      struct {
-         unsigned short data: 11;
-         unsigned short type_check: 5;
-      } class_type;
-      BL_Instr bl;
    } instr; 
 };
 
@@ -416,6 +411,36 @@ class ALL_Types{
 };
 static void printCond(char byte) {
    switch (byte) {
+      case 0:
+         cout << "eq";
+         break;
+      case 1:
+         cout << "ne";
+         break;
+      case 2:
+         cout << "cs";
+         break;
+      case 3:
+         cout << "cc";
+         break;
+      case 4:
+         cout << "mi";
+         break;
+      case 5:
+         cout << "pl";
+         break;
+      case 6:
+         cout << "vs";
+         break;
+      case 7:
+         cout << "vc";
+         break;
+      case 8:
+         cout << "hi";
+         break;
+      case 9:
+         cout << "ls";
+         break;
       case 10:
          cout << "ge";
          break;
@@ -560,6 +585,8 @@ class Data32 {
          cout << hex << d.data_uint() << endl;
       }
 };
+enum OFType { OF_ADD, OF_SUB, OF_SHIFT };
+
 enum MemType { MEM_MEM, MEM_RF, MEM_INVALID };
 
 enum DataType { INSTRUCTIONS, DATA };
@@ -750,8 +777,7 @@ typedef enum SP_Ops {
    SP_CMP,
    SP_MOV,
    SP_BX,
-   SP_BLX,
-   SP_CMPR
+   SP_BLX
 } SP_Ops;
 
 typedef enum LD_ST_Ops {
@@ -790,6 +816,11 @@ typedef enum MISC_Ops {
    MISC_HINT
 } MISC_Ops;
 
+typedef enum BL_Ops {
+  BL_UPPER,
+  BL_LOWER
+} BL_Ops;
+
 typedef struct APSR {
    unsigned char N;
    unsigned char Z;
@@ -818,12 +849,12 @@ DP_Ops decode (const DP_Type);
 SP_Ops decode (const SP_Type);
 LD_ST_Ops decode (const LD_ST_Type);
 MISC_Ops decode (const MISC_Type);
+BL_Ops decode (const BL_Type);
 int decode (const COND_Type);
 int decode (const UNCOND_Type);
 int decode (const LDM_Type);
 int decode (const STM_Type);
 int decode (const LDRL_Type);
 int decode (const ADD_SP_Type);
-int decode (const BL_Type);
 void execute();  
 #endif
