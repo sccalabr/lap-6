@@ -8,9 +8,9 @@
 #define LR rf[LR_REG]
 #define SP rf[SP_REG]
 #define LOGGER 0
-#define BL_TYPE 30
 
 ASPR flags;
+enum OFType { OF_ADD, OF_SUB, OF_SHIFT };
 
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
@@ -56,6 +56,61 @@ void updateFlagsRegisterAndImmediateValue(ALU_Type alu) {
    }
 }
 
+
+void setCarryOverflow (int num1, int num2, OFType oftype) {
+
+  switch (oftype) {
+    case OF_ADD:
+      if (((unsigned long long int)num1 + (unsigned long long int)num2) ==
+          ((unsigned int)num1 + (unsigned int)num2)) {
+        flags.C = 0;
+      }
+      else {
+        flags.C = 1;
+      }
+      if (((long long int)num1 + (long long int)num2) ==
+          ((int)num1 + (int)num2)) {
+        flags.V = 0;
+      }
+      else {
+        flags.V = 1;
+      }
+      break;
+    case OF_SUB:
+      if (((unsigned long long int)num1 - (unsigned long long int)num2) ==
+          ((unsigned int)num1 - (unsigned int)num2)) {
+        flags.C = 0;
+      }
+      else {
+        flags.C = 1;
+      }
+      if (((num1==0) && (num2==0)) || 
+          (((long long int)num1 - (long long int)num2) ==
+          ((int)num1 - (int)num2))) {
+        flags.V = 0;
+      }
+      else {
+        flags.V = 1;
+      }
+      break;
+    case OF_SHIFT:
+      // C flag unaffected for shifts by zero
+      if (num2 != 0) {
+        if (((unsigned long long int)num1 << (unsigned long long int)num2) ==
+            ((unsigned int)num1 << (unsigned int)num2)) {
+          flags.C = 0;
+        }
+        else {
+          flags.C = 1;
+        }
+      }
+      // Shift doesn't set overflow
+      break;
+    default:
+      cerr << "Bad OverFlow Type encountered." << __LINE__ << __FILE__ << endl;
+      exit(1);
+  }
+}
 
 // You're given the code for evaluating BEQ, 
 // and you'll need to fill in the rest of these.
@@ -197,12 +252,6 @@ void popRegistersOffOfStack(MISC_Type misc) {
    rf.write(PC_REG, LR);
 }
 
-void handleBranchAndLink(Data16 instr) {
-   //Should be the address of the next instruction
-   rf.write(LR, PC - 4);
-   //dont think this is right
-   rf.write(PC_REG, PC + 2 * signExtend8to32ui(instr.data_ushort() & 0x3FF) + 2);
-}
 // not sure how to handle overflow bit so ignoring for now.
 void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
    int result;
@@ -314,13 +363,14 @@ void execute() {
    STM_Type stm(instr);
    LDRL_Type ldrl(instr);
    ADD_SP_Type addsp(instr);
-   BL_Type bl(instr);
+   BL_Type blupper(instr);
 
    ALU_Ops add_ops;
    DP_Ops dp_ops;
    SP_Ops sp_ops;
    LD_ST_Ops ldst_ops;
    MISC_Ops misc_ops;
+   BL_Ops bl_ops;
 
    rf.write(PC_REG, pctarget);
 
@@ -438,7 +488,7 @@ void execute() {
          decode(ldm);
 
          break;
-      case STM: // not sure if it is right
+      case STM:
       {   decode(stm);
          int counter = 0;
          for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
@@ -461,8 +511,31 @@ void execute() {
          rf.write(addsp.instr.add.rd, SP + (addsp.instr.add.imm*4));
          break;
       case BL:
-         handleBranchAndLink(instr);
-         break;
+         bl_ops = decode(blupper);
+         if (bl_ops == BL_UPPER) {
+           // PC has already been incremented above
+           Data16 instr2 = imem[PC];
+           BL_Type bllower(instr2);
+           if (blupper.instr.bl_upper.s) {
+             addr = static_cast<int>(0xff<<24) | 
+                    ((~(bllower.instr.bl_lower.j1 ^ blupper.instr.bl_upper.s))<<23) | 
+                    ((~(bllower.instr.bl_lower.j2 ^ blupper.instr.bl_upper.s))<<22) | 
+                    ((blupper.instr.bl_upper.imm10)<<12) | 
+                    ((bllower.instr.bl_lower.imm11)<<1);
+           }
+           else { 
+             addr = ((blupper.instr.bl_upper.imm10)<<12) | 
+                    ((bllower.instr.bl_lower.imm11)<<1); 
+           }
+           // return address is 4-bytes away from the start of the BL insn 
+           rf.write(LR_REG, PC + 2); 
+           // Target address is also computed from that point 
+           rf.write(PC_REG, PC + 2 + addr); 
+         }
+         else {
+           cerr << "Bad BL format." << endl; exit(1); 
+         }
+       break; 
       default:
          cout << "[ERROR] Unknown Instruction to be executed" << endl;
          //exit(1);
