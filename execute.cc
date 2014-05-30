@@ -7,54 +7,12 @@
 #define PC rf[PC_REG]
 #define LR rf[LR_REG]
 #define SP rf[SP_REG]
-#define LOGGER 0
+#define LEFT_SHIFT 0
+#define RIGHT_SHIFT 1
+#define LOGGER 1
 
 ASPR flags;
 enum OFType { OF_ADD, OF_SUB, OF_SHIFT };
-
-unsigned int signExtend16to32ui(short i) {
-   return static_cast<unsigned int>(static_cast<int>(i));
-}
-
-unsigned int signExtend8to32ui(char i) {
-   return static_cast<unsigned int>(static_cast<int>(i));
-}
-
-void updateFlagsRegisterAndImmediateValue(ALU_Type alu) {
-   int regValue = rf[alu.instr.cmp.rdn];
-   int immValue = alu.instr.cmp.imm;
-   int difference = regValue - immValue;
-
-   if(difference == 0) {
-      flags.Z = 1;
-   }
-   else {
-      flags.Z = 0;
-   }
-   //I do not think this can happen since arm is 16 bits
-   // This is a carry
-   if(FALSE) {
-      flags.C = 1;
-   }
-   else {
-      flags.C = 0;
-   }
-   
-   if(difference < 0) {
-      flags.N = 1;
-   }
-   else {
-      flags.N = 0;
-   }
-   //I do not think this can happen since arm is 16 bits
-   //This is overflow
-   if(FALSE) {
-      flags.V = 1;
-   }
-   else {
-      flags.V = 0;
-   }
-}
 
 
 void setCarryOverflow (int num1, int num2, OFType oftype) {
@@ -111,6 +69,67 @@ void setCarryOverflow (int num1, int num2, OFType oftype) {
       exit(1);
   }
 }
+
+unsigned int signExtend16to32ui(short i) {
+   return static_cast<unsigned int>(static_cast<int>(i));
+}
+
+unsigned int signExtend8to32ui(char i) {
+   return static_cast<unsigned int>(static_cast<int>(i));
+}
+
+void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
+   int regValue = rf[alu.instr.cmp.rdn];
+   int immValue = alu.instr.cmp.imm;
+   int difference = regValue - immValue;
+
+   if(difference == 0) {
+      flags.Z = 1;
+   }
+   else {
+      flags.Z = 0;
+   }
+   if(difference < 0) {
+      flags.N = 1;
+   }
+   else {
+      flags.N = 0;
+   }
+   
+   setCarryOverflow(regValue, immValue, OF_SUB);
+}
+
+void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftType) {
+   int regValue = rf[alu.instr.lsli.rm];
+   int immValue = alu.instr.lsli.imm;
+   int difference;
+   
+   if(LEFT_SHIFT == shiftType) {
+      difference = regValue << immValue;
+   }
+   else if(RIGHT_SHIFT == shiftType) {
+      difference = regValue >> immValue;
+   }
+   else {
+      cout << "GIVE ME GOOD DATA!!!\n";
+   }
+
+   if(difference == 0) {
+      flags.Z = 1;
+   }
+   else {
+      flags.Z = 0;
+   }
+   if(difference < 0) {
+      flags.N = 1;
+   }
+   else {
+      flags.N = 0;
+   }
+   
+   setCarryOverflow(regValue, immValue, OF_SHIFT);
+}
+
 
 // You're given the code for evaluating BEQ, 
 // and you'll need to fill in the rest of these.
@@ -307,20 +326,7 @@ void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
       else {
          flags.Z = 0;
       }
-      //NOT SURE ABOUT OVERFLOW AND CARRY
-      if(FALSE) {
-         flags.C = 1;
-      }
-      else {
-         flags.C = 0;
-      }
-      
-      if(FALSE) {
-         flags.V = 1;
-      }
-      else{
-         flags.V = 0;
-      }
+         setCarryOverflow(arg1, arg2, OF_SUB);
    }
    /*else if(dp_ops == DP_CMN) {
    }
@@ -381,15 +387,18 @@ void execute() {
          switch(add_ops) {
             case ALU_LSLI:
                //Stephen
-               rf.write(alu.instr.lsli.rd, rf[alu.instr.lsli.rm] + alu.instr.lsli.imm);
+               updateFlagsRegisterAndImmediateValueLogicalShift(alu, LEFT_SHIFT);
+               rf.write(alu.instr.lsli.rd, rf[alu.instr.lsli.rm] << alu.instr.lsli.imm);
                break;
             case ALU_LSRI:
                //Stephen
-               rf.write(alu.instr.lsri.rd, rf[alu.instr.lsri.rm] + alu.instr.lsri.imm);
+               updateFlagsRegisterAndImmediateValueLogicalShift(alu, RIGHT_SHIFT);
+               rf.write(alu.instr.lsri.rd, rf[alu.instr.lsri.rm] >> alu.instr.lsri.imm);
                break;
             case ALU_ASRI:
                //Stephen
-               rf.write(alu.instr.asri.rd, rf[alu.instr.asri.rm] + alu.instr.asri.imm);
+               cout << "THIS IS MORE THAN LIKELY WRONG!\n";
+               rf.write(alu.instr.asri.rd, rf[alu.instr.asri.rm] >> alu.instr.asri.imm);
                break;
             case ALU_ADDR:
                rf.write(alu.instr.addr.rd, rf[alu.instr.addr.rn] + rf[alu.instr.addr.rm]);
@@ -409,7 +418,7 @@ void execute() {
                rf.write(alu.instr.mov.rdn, alu.instr.mov.imm);
                break;
             case ALU_CMP: 
-               updateFlagsRegisterAndImmediateValue(alu);
+               updateFlagsRegisterAndImmediateValueCMP(alu);
                break;
             case ALU_ADD8I:
                rf.write(alu.instr.add8i.rdn, rf[alu.instr.add8i.rdn] + alu.instr.add8i.imm);
@@ -444,13 +453,39 @@ void execute() {
          // to implement ldrb/strb, ldm/stm and push/pop
          ldst_ops = decode(ld_st);
          switch(ldst_ops) {
-            case STRR:
+            case STRI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm * 4;
                dmem.write(addr, rf[ld_st.instr.ld_st_imm.rt]);
                break;
-            case LDRR:
+            case LDRI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm * 4;
                rf.write(ld_st.instr.ld_st_imm.rt, dmem[addr]);
+               break;
+               
+            case LDRBI:
+               cout << "**LDRBI\n";
+               break;
+
+            case STRBI:
+               cout << "**STRBI\n";
+               break;
+            
+            case LDRBR:
+               cout << "**LDRBR\n";
+               break;
+            case STRBR:
+               cout << "**STRBRn";
+               break;
+               
+            case LDRR:
+               addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               rf.write(ld_st.instr.ld_st_reg.rt, dmem[addr]);
+               //cout << "**LDRR\n";
+               break;
+            case STRR:
+               addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               dmem.write(addr, rf[ld_st.instr.ld_st_reg.rt]);
+               //cout << "**STRR\n";
                break;
          }
          break;
@@ -486,7 +521,7 @@ void execute() {
       case LDM:
          //Stephen not sure and not need for fib
          decode(ldm);
-
+         cout << "LDM_STEPHEN\n";
          break;
       case STM:
       {   decode(stm);
@@ -503,7 +538,7 @@ void execute() {
       case LDRL:
          //Stephen
          decode(ldrl);
-         addr = SP + (ldrl.instr.ldrl.imm*4);
+         addr = PC + (ldrl.instr.ldrl.imm*4);
          rf.write(ldrl.instr.ldrl.rt, dmem[addr]);
          break;
       case ADD_SP:
@@ -543,6 +578,7 @@ void execute() {
    }
    
       if(LOGGER) {
+      cout << "SP = d(13), LR = e(14), PC = f(15)";
          for(int i = 0; i < 16; i++) {
             cout << "Register " << i << ": " << rf[i]<< endl;
          }
