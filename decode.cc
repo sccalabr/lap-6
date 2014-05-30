@@ -487,7 +487,7 @@ int decode (const STM_Type data) {
 
 int decode (const LDRL_Type data) {
    if (opts.instrs)
-      cout << "ldrl r" << data.instr.ldrl.rt << ", #" << setbase(10) << data.instr.ldrl.rt * 4 << endl;
+      cout << "ldrl r" << data.instr.ldrl.rt << ", #" << setbase(10) << data.instr.ldrl.imm* 4 << endl;
    
    return LDRL_TYPE;
 }
