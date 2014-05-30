@@ -133,19 +133,19 @@ Thumb_Types decode (const ALL_Types data) {
 ALU_Ops decode (const ALU_Type data) {
    if (data.instr.lsli.op == ALU_LSLI_OP) {
       if (opts.instrs) {     
-         cout << "lsrs r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << data.instr.lsli.imm << endl;
+         cout << "lsrs r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << setbase(10) << data.instr.lsli.imm << endl;
       }
       return ALU_LSLI;
    }
    else if (data.instr.lsri.op == ALU_LSRI_OP) {
       if (opts.instrs) {
-         cout << "lsrs r" << data.instr.lsri.rd << ", r" << data.instr.lsri.rd << ", #" << data.instr.lsri.imm << endl;
+         cout << "lsrs r" << data.instr.lsri.rd << ", r" << data.instr.lsri.rd << ", #" << setbase(10) << data.instr.lsri.imm << endl;
       }
       return ALU_LSRI;
    }
    else if (data.instr.asri.op == ALU_ASRI_OP) {
       if (opts.instrs) {
-         cout << "asrs r" << data.instr.asri.rd << ", r" << data.instr.asri.rd << ", #" << data.instr.asri.imm << endl;
+         cout << "asrs r" << data.instr.asri.rd << ", r" << data.instr.asri.rd << ", #" << setbase(10) << data.instr.asri.imm << endl;
       }
       return ALU_ASRI;
    }
@@ -163,37 +163,37 @@ ALU_Ops decode (const ALU_Type data) {
    }
    else if (data.instr.add3i.op == ALU_ADD3I_OP) {
       if (opts.instrs) { 
-         cout << "adds r" << data.instr.add3i.rd << ", r" << data.instr.add3i.rn << ", #" << data.instr.add3i.imm << endl;
+         cout << "adds r" << data.instr.add3i.rd << ", r" << data.instr.add3i.rn << ", #" << setbase(10) << data.instr.add3i.imm << endl;
       }
       return ALU_ADD3I;
    }
    else if (data.instr.sub3i.op == ALU_SUB3I_OP) {
       if (opts.instrs) {
-         cout << "subs r" << data.instr.sub3i.rd << ", r" << data.instr.sub3i.rn << ", #" << data.instr.sub3i.imm << endl;
+         cout << "subs r" << data.instr.sub3i.rd << ", r" << data.instr.sub3i.rn << ", #" << setbase(10) << data.instr.sub3i.imm << endl;
       }
       return ALU_SUB3I;
    }
    else if (data.instr.add8i.op == ALU_ADD8I_OP) {
       if (opts.instrs) { 
-         cout << "adds r" << data.instr.add8i.rdn << ", #" << data.instr.add8i.imm << endl;
+         cout << "adds r" << data.instr.add8i.rdn << ", #" << setbase(10) << data.instr.add8i.imm << endl;
       }
       return ALU_ADD8I;
    }
    else if (data.instr.sub8i.op == ALU_SUB8I_OP) {
       if (opts.instrs) {
-         cout << "subs r" << data.instr.sub8i.rdn << ", #" << data.instr.sub8i.imm << endl;
+         cout << "subs r" << data.instr.sub8i.rdn << ", #" << setbase(10) << data.instr.sub8i.imm << endl;
       }
       return ALU_SUB8I;
    }
    else if (data.instr.cmp.op == ALU_CMP_OP) { 
       if (opts.instrs) { 
-         cout << "cmp r" << data.instr.cmp.rdn << ", #" << data.instr.cmp.imm << endl;
+         cout << "cmp r" << data.instr.cmp.rdn << ", #" << setbase(10) << data.instr.cmp.imm << endl;
       }
       return ALU_CMP;
    }
    else if (data.instr.mov.op == ALU_MOV_OP) { 
       if (opts.instrs) { 
-         cout << "movs r" << data.instr.mov.rdn << ", #" << (data.instr.mov.imm) << endl;
+         cout << "movs r" << data.instr.mov.rdn << ", #" << setbase(10) << (data.instr.mov.imm) << endl;
       }
       return ALU_MOV;
    }
@@ -323,6 +323,7 @@ SP_Ops decode (const SP_Type data) {
    }
 
 }
+
 LD_ST_Ops decode (const LD_ST_Type data) {
    if (data.instr.class_type.opA == LD_ST_REG_OPA) {
       if (data.instr.class_type.opB == LD_ST_OPB_STR) {
@@ -380,6 +381,7 @@ LD_ST_Ops decode (const LD_ST_Type data) {
    cout << "==>add 25\n";
    }
 }
+
 MISC_Ops decode (const MISC_Type data) {
    if (data.instr.push.op == MISC_PUSH_OP) {
       if (opts.instrs) { 
