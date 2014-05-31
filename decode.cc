@@ -197,6 +197,9 @@ ALU_Ops decode (const ALU_Type data) {
       }
       return ALU_MOV;
    }
+   else {
+      cout << "MISSED A TYPE\n";
+   }
 }
 
 //page 86
@@ -297,6 +300,9 @@ DP_Ops decode (const DP_Type data) {
       }
       return DP_MVN;
    }
+   else {
+      cout << "MISSED A TYPE\n";
+   }
 }
 
 SP_Ops decode (const SP_Type data) {
@@ -380,6 +386,9 @@ LD_ST_Ops decode (const LD_ST_Type data) {
    else if (data.instr.class_type.opA == LD_ST_IMMSP_OPA) {
    cout << "==>add 25\n";
    }
+   else {
+      cout << "MISSED A TYPE\n";
+   }
 }
 
 MISC_Ops decode (const MISC_Type data) {
@@ -437,6 +446,9 @@ MISC_Ops decode (const MISC_Type data) {
       }
       return MISC_ADD;
    }
+   else {
+      cout << "MISSED A TYPE\n";
+   }
 
 }
 
@@ -446,6 +458,7 @@ int decode (const COND_Type data) {
       printCond(data.instr.b.cond);
       cout << " 0x" << hex << data.instr.b.imm << endl;
    }
+   
    return COND_TYPE;
 }
 
@@ -453,6 +466,7 @@ int decode (const UNCOND_Type data) {
    if (opts.instrs) { 
       cout << "b 0x" << hex << data.instr.b.imm << endl;
    }
+ 
    return UNCOND_TYPE;
 }
 
