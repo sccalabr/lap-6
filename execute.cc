@@ -9,7 +9,9 @@
 #define SP rf[SP_REG]
 #define LEFT_SHIFT 0
 #define RIGHT_SHIFT 1
-#define LOGGER 1
+#define SUBTRACTION 2
+#define ADDITION 3
+#define LOGGER 0
 
 ASPR flags;
 enum OFType { OF_ADD, OF_SUB, OF_SHIFT };
@@ -99,7 +101,76 @@ void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
    setCarryOverflow(regValue, immValue, OF_SUB);
 }
 
+void updateFlagsRegisterADDSUBRegisterImmmediate(ALU_Type alu, int operation, int flag) {
+   // add and sub should have the same layout
+   int regValue = flag == 3 ? rf[alu.instr.add3i.rn] : rf[alu.instr.add8i.rdn];
+   int immValue = flag == 3 ? alu.instr.add3i.imm : alu.instr.add8i.imm;
+   int difference;
+   
+   if(operation == ADDITION) {
+      difference = regValue + immValue;
+   }
+   else if(operation == SUBTRACTION) {
+      difference = regValue - immValue;
+   }
+
+   if(difference == 0) {
+      flags.Z = 1;
+   }
+   else {
+      flags.Z = 0;
+   }
+   if(difference < 0) {
+      flags.N = 1;
+   }
+   else {
+      flags.N = 0;
+   }
+   
+   if (operation == ADDITION) {
+      setCarryOverflow(regValue, immValue, OF_ADD);
+   }
+   else if(operation == SUBTRACTION) {
+      setCarryOverflow(regValue, immValue, OF_SUB);
+   }
+}
+
+void updateFlagsRegisterADDSUBRegisterRegister(ALU_Type alu, int operation) {
+   // add and sub should have the same layout
+   int regValue = rf[alu.instr.addr.rn];
+   int regValue2 = rf[alu.instr.addr.rm];
+   int difference;
+   
+   if(operation == ADDITION) {
+      difference = regValue + regValue2;
+   }
+   else if(operation == SUBTRACTION) {
+      difference = regValue - regValue2;
+   }
+
+   if(difference == 0) {
+      flags.Z = 1;
+   }
+   else {
+      flags.Z = 0;
+   }
+   if(difference < 0) {
+      flags.N = 1;
+   }
+   else {
+      flags.N = 0;
+   }
+   
+   if (operation == ADDITION) {
+      setCarryOverflow(regValue, regValue2, OF_ADD);
+   }
+   else if(operation == SUBTRACTION) {
+      setCarryOverflow(regValue, regValue2, OF_SUB);
+   }
+}
+
 void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftType) {
+   //lsl and lsr should have the same layout
    int regValue = rf[alu.instr.lsli.rm];
    int immValue = alu.instr.lsli.imm;
    int difference;
@@ -130,6 +201,25 @@ void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftTyp
    setCarryOverflow(regValue, immValue, OF_SHIFT);
 }
 
+void updateFlagsMOV(int number) {
+   //lsl and lsr should have the same layout
+   int immValue = number;
+
+   if(immValue == 0) {
+      flags.Z = 1;
+   }
+   else {
+      flags.Z = 0;
+   }
+   if(immValue < 0) {
+      flags.N = 1;
+   }
+   else {
+      flags.N = 0;
+   }
+   // dont think move can over flow and carry
+   //setCarryOverflow(regValue, immValue, OF_SHIFT);
+}
 
 // You're given the code for evaluating BEQ, 
 // and you'll need to fill in the rest of these.
@@ -401,31 +491,38 @@ void execute() {
                rf.write(alu.instr.asri.rd, rf[alu.instr.asri.rm] >> alu.instr.asri.imm);
                break;
             case ALU_ADDR:
+               updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
                rf.write(alu.instr.addr.rd, rf[alu.instr.addr.rn] + rf[alu.instr.addr.rm]);
                break;
             case ALU_SUBR:
                //Stephen
+               updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
                rf.write(alu.instr.subr.rd, rf[alu.instr.subr.rn] + rf[alu.instr.subr.rm]);
                break;
             case ALU_ADD3I:
+               updateFlagsRegisterADDSUBRegisterImmmediate(alu, ADDITION, 3);
                rf.write(alu.instr.add3i.rd, rf[alu.instr.add3i.rn] + alu.instr.add3i.imm);
                break;
             case ALU_SUB3I:
                //Stephen
-               rf.write(alu.instr.sub3i.rd, rf[alu.instr.sub3i.rn] + alu.instr.sub3i.imm);
+               updateFlagsRegisterADDSUBRegisterImmmediate(alu, SUBTRACTION, 3);
+               rf.write(alu.instr.sub3i.rd, rf[alu.instr.sub3i.rn] - alu.instr.sub3i.imm);
                break;
             case ALU_MOV:
+               updateFlagsMOV(alu.instr.mov.imm);
                rf.write(alu.instr.mov.rdn, alu.instr.mov.imm);
                break;
             case ALU_CMP: 
                updateFlagsRegisterAndImmediateValueCMP(alu);
                break;
             case ALU_ADD8I:
+               updateFlagsRegisterADDSUBRegisterImmmediate(alu, ADDITION, 8);
                rf.write(alu.instr.add8i.rdn, rf[alu.instr.add8i.rdn] + alu.instr.add8i.imm);
                break;
             case ALU_SUB8I:
                //Stephen
-               rf.write(alu.instr.sub8i.rdn, rf[alu.instr.sub8i.rdn] + alu.instr.sub8i.imm);               
+               updateFlagsRegisterADDSUBRegisterImmmediate(alu, SUBTRACTION, 8);
+               rf.write(alu.instr.sub8i.rdn, rf[alu.instr.sub8i.rdn] - alu.instr.sub8i.imm);               
                break;
             default:
                break;
@@ -440,6 +537,7 @@ void execute() {
          switch(sp_ops) {
             case SP_MOV:
                if (sp.instr.mov.d) {
+               updateFlagsMOV(sp.instr.mov.rm);
                   rf.write(SP_REG, rf[sp.instr.mov.rm]);
                }
                else {
