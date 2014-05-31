@@ -16,7 +16,7 @@
 ASPR flags;
 enum OFType { OF_ADD, OF_SUB, OF_SHIFT };
 
-
+//assumed to be good
 void setCarryOverflow (int num1, int num2, OFType oftype) {
 
   switch (oftype) {
@@ -71,15 +71,17 @@ void setCarryOverflow (int num1, int num2, OFType oftype) {
       exit(1);
   }
 }
-
+//good
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
 }
-
+//good
 unsigned int signExtend8to32ui(char i) {
    return static_cast<unsigned int>(static_cast<int>(i));
 }
-
+//*********************************************************
+//LOOK AT, MATT Do you think a cmp would get a OF_SUB TYPE?
+//*********************************************************
 void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
    int regValue = rf[alu.instr.cmp.rdn];
    int immValue = alu.instr.cmp.imm;
@@ -100,7 +102,7 @@ void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
    
    setCarryOverflow(regValue, immValue, OF_SUB);
 }
-
+//good
 void updateFlagsRegisterADDSUBRegisterImmmediate(ALU_Type alu, int operation, int flag) {
    // add and sub should have the same layout
    int regValue = flag == 3 ? rf[alu.instr.add3i.rn] : rf[alu.instr.add8i.rdn];
@@ -134,7 +136,7 @@ void updateFlagsRegisterADDSUBRegisterImmmediate(ALU_Type alu, int operation, in
       setCarryOverflow(regValue, immValue, OF_SUB);
    }
 }
-
+//good
 void updateFlagsRegisterADDSUBRegisterRegister(ALU_Type alu, int operation) {
    // add and sub should have the same layout
    int regValue = rf[alu.instr.addr.rn];
@@ -168,7 +170,7 @@ void updateFlagsRegisterADDSUBRegisterRegister(ALU_Type alu, int operation) {
       setCarryOverflow(regValue, regValue2, OF_SUB);
    }
 }
-
+//good
 void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftType) {
    //lsl and lsr should have the same layout
    int regValue = rf[alu.instr.lsli.rm];
@@ -200,7 +202,7 @@ void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftTyp
    
    setCarryOverflow(regValue, immValue, OF_SHIFT);
 }
-
+//good
 void updateFlagsMOV(int number) {
    //lsl and lsr should have the same layout
    int immValue = number;
@@ -217,13 +219,12 @@ void updateFlagsMOV(int number) {
    else {
       flags.N = 0;
    }
-   // dont think move can over flow and carry
-   //setCarryOverflow(regValue, immValue, OF_SHIFT);
 }
 
 // You're given the code for evaluating BEQ, 
 // and you'll need to fill in the rest of these.
 // See Page 99 of the armv6 manual
+//*good but did not really check*
 static int checkCondition(unsigned short cond) {
    switch(cond) {
       case EQ:
@@ -302,9 +303,10 @@ static int checkCondition(unsigned short cond) {
    }
    return FALSE;
 }
-
+//good
 int countOneBits(unsigned int instruction) {
-   instruction &= 0x00FF;
+   //might not be needed
+   //instruction &= 0x00FF;
    int counter = 0;
    
    for( ; instruction; counter++) {
@@ -313,7 +315,7 @@ int countOneBits(unsigned int instruction) {
 
    return counter;
 }
-
+//LOOK AT MATT, 167 dont like the -4 but need in in the last line, WORKS FOR FIB
 void pushRegistersOntoStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list);
    unsigned int spAddress = SP - 4 * numberOfRegisters;
@@ -335,7 +337,7 @@ void pushRegistersOntoStack(MISC_Type misc) {
 
    rf.write(SP_REG, SP - 4 * numberOfRegisters - 4);
 }
-
+//LOOK AT MATT, SAME ISSUE AS POP, WORKS FOR FIB
 void popRegistersOffOfStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list);
    unsigned int spAddress = SP;
@@ -361,7 +363,7 @@ void popRegistersOffOfStack(MISC_Type misc) {
    rf.write(PC_REG, LR);
 }
 
-// not sure how to handle overflow bit so ignoring for now.
+//good
 void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
    int result;
    /*if(dp_ops == DP_AND) {
@@ -401,7 +403,7 @@ void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
       int arg2 = rf[dp.instr.dp.rm];
       result = arg1 - arg2;
       
-      cout << arg1 << "   " << arg2 << endl; 
+      //cout << arg1 << "   " << arg2 << endl; 
       
       if(result < 0) {
          flags.N = 1;
@@ -488,16 +490,17 @@ void execute() {
             case ALU_ASRI:
                //Stephen
                cout << "THIS IS MORE THAN LIKELY WRONG!\n";
+               exit(0);
                rf.write(alu.instr.asri.rd, rf[alu.instr.asri.rm] >> alu.instr.asri.imm);
                break;
             case ALU_ADDR:
-               updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
+               //updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
                rf.write(alu.instr.addr.rd, rf[alu.instr.addr.rn] + rf[alu.instr.addr.rm]);
                break;
             case ALU_SUBR:
                //Stephen
-               updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
-               rf.write(alu.instr.subr.rd, rf[alu.instr.subr.rn] + rf[alu.instr.subr.rm]);
+               //updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
+               rf.write(alu.instr.subr.rd, rf[alu.instr.subr.rn] - rf[alu.instr.subr.rm]);
                break;
             case ALU_ADD3I:
                updateFlagsRegisterADDSUBRegisterImmmediate(alu, ADDITION, 3);
@@ -505,7 +508,7 @@ void execute() {
                break;
             case ALU_SUB3I:
                //Stephen
-               updateFlagsRegisterADDSUBRegisterImmmediate(alu, SUBTRACTION, 3);
+               //updateFlagsRegisterADDSUBRegisterImmmediate(alu, SUBTRACTION, 3);
                rf.write(alu.instr.sub3i.rd, rf[alu.instr.sub3i.rn] - alu.instr.sub3i.imm);
                break;
             case ALU_MOV:
@@ -536,8 +539,8 @@ void execute() {
          sp_ops = decode(sp);
          switch(sp_ops) {
             case SP_MOV:
-               if (sp.instr.mov.d) {
                updateFlagsMOV(sp.instr.mov.rm);
+               if (sp.instr.mov.d) {
                   rf.write(SP_REG, rf[sp.instr.mov.rm]);
                }
                else {
@@ -620,9 +623,13 @@ void execute() {
          //Stephen not sure and not need for fib
          decode(ldm);
          cout << "LDM_STEPHEN\n";
+         exit(0);
          break;
       case STM:
-      {   decode(stm);
+      {   
+         decode(stm);
+         cout << "NOT IN SHA O0\n";
+         exit(0);  
          int counter = 0;
          for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
             if(misc.instr.push.reg_list & mask) {
@@ -633,6 +640,8 @@ void execute() {
          // may not need to write back pg 175
          rf.write(stm.instr.stm.rn, stm.instr.stm.rn + 4 * countOneBits(stm.instr.stm.reg_list));
       }   break;
+      //************************************************************************
+      //MAT LOOK AT, PAGE 141 I think we need the PC + what do you think?
       case LDRL:
          //Stephen
          decode(ldrl);
