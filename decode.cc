@@ -133,7 +133,7 @@ Thumb_Types decode (const ALL_Types data) {
 ALU_Ops decode (const ALU_Type data) {
    if (data.instr.lsli.op == ALU_LSLI_OP) {
       if (opts.instrs) {     
-         cout << "lsrs r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << setbase(10) << data.instr.lsli.imm << endl;
+         cout << "lsls r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << setbase(10) << data.instr.lsli.imm << endl;
       }
       return ALU_LSLI;
    }
