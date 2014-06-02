@@ -133,13 +133,13 @@ Thumb_Types decode (const ALL_Types data) {
 ALU_Ops decode (const ALU_Type data) {
    if (data.instr.lsli.op == ALU_LSLI_OP) {
       if (opts.instrs) {     
-         cout << "lsls r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rd << ", #" << setbase(10) << data.instr.lsli.imm << endl;
+         cout << "lsls r" << data.instr.lsli.rd << ", r" << data.instr.lsli.rm << ", #" << setbase(10) << data.instr.lsli.imm << endl;
       }
       return ALU_LSLI;
    }
    else if (data.instr.lsri.op == ALU_LSRI_OP) {
       if (opts.instrs) {
-         cout << "lsrs r" << data.instr.lsri.rd << ", r" << data.instr.lsri.rd << ", #" << setbase(10) << data.instr.lsri.imm << endl;
+         cout << "lsrs r" << data.instr.lsri.rd << ", r" << data.instr.lsri.rm << ", #" << setbase(10) << data.instr.lsri.imm << endl;
       }
       return ALU_LSRI;
    }
@@ -309,17 +309,22 @@ SP_Ops decode (const SP_Type data) {
    if (data.instr.mov.op == 2) {
       if (opts.instrs) { 
          cout << "mov";
-         /*if (data.instr.mov.d) {
-            cout << " sp, r" << data.instr.mov.rm << endl;
+         if (data.instr.mov.d == 1) {
+            cout << " r" << data.instr.mov.rd + 8 << ", r" << data.instr.mov.rm << endl;
          }
-         else {*/
+         else {
             cout << " r" << data.instr.mov.rd << ", r" << data.instr.mov.rm << endl;
-         //}
+         }
       }
       return SP_MOV;
    }//using cmp reg on page 129 encoding 2
    else if(data.instr.cmp.op == 1) {
-      cout << "cmp r" << data.instr.cmp.rd << ", " << data.instr.cmp.rm <<endl;
+      unsigned int dBit = 0;
+      if(data.instr.cmp.d == 1) {
+         dBit = 8;
+      }
+
+      cout << "cmp r" << data.instr.cmp.rd + dBit << ", r" << data.instr.cmp.rm <<endl;
       return SP_CMPR;
    }
    else if(data.instr.add.op == 0) {
@@ -392,7 +397,6 @@ LD_ST_Ops decode (const LD_ST_Type data) {
       }
    }
    else if (data.instr.class_type.opA == LD_ST_IMMB_OPA) {
-   cout << "HERE\n";
       if (data.instr.class_type.opB == LD_ST_OPB_LDR){           
          if (opts.instrs) {        
             cout << "ldrb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
@@ -499,7 +503,7 @@ int decode (const UNCOND_Type data) {
 int decode (const LDM_Type data) {
    unsigned int reg = data.instr.ldm.rn ;
    if (opts.instrs) {
-      cout << "ldm r" << reg << "!";
+      cout << "ldmia r" << reg << "!";
       if((data.instr.ldm.reg_list & (1 << reg)) == 1) {
          cout << "!, {";
       }
