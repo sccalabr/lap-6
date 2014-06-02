@@ -316,7 +316,11 @@ int countOneBits(unsigned int instruction) {
 
    return counter;
 }
-//LOOK AT MATT, 167 dont like the -4 but need in in the last line, WORKS FOR FIB
+/*****************************************************************************
+
+THIS MAY BE BROKEN ALONG WITH POP. MAKE A TEST CASE WITH TWO BL!!!
+
+*****************************************************************************/
 void pushRegistersOntoStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list) + 1;
    unsigned int spAddress = SP - 4 * numberOfRegisters;
@@ -591,9 +595,16 @@ void execute() {
                   setCarryOverflow(arg1, arg2, OF_SUB);
             }
                break;
+/****************************************************************************
+ * 
+ * CHECK THIS CASE
+ * 
+ * *************************************************************************/
             case SP_ADD: 
                rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
                break;
+            default:
+              cout << "MISSED A CASES\n";
          }
          break;
       case LD_ST:
@@ -611,19 +622,18 @@ void execute() {
                break;
             //FOR LDRBU AND STRBI MAY NEED TO WRITE BACK TO RN 180   
             case LDRBI:
-               addr = rf[ld_st.instr.ld_st_imm.rn] + rf[ld_st.instr.ld_st_imm.imm];
+               addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm;
                addr = dmem[addr];
                rf.write(ld_st.instr.ld_st_imm.rt, signExtend8to32ui((addr & 0x00FF)));
                break;
             case STRBI:
             {
-               addr = rf[ld_st.instr.ld_st_imm.rn] + rf[ld_st.instr.ld_st_imm.imm];
+               addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm;
                unsigned int addr2 = dmem[addr];
                addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_imm.rt] & 0x000000FF));
                dmem.write(addr, addr2);
             }                     
              break;
-            //BROKEN
             case LDRBR:
                /*if(flags.c == 1) {
                   cout<<" MAY NEED TO DO SOMETHING PAGE 145 ";
