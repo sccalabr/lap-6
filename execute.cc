@@ -12,6 +12,7 @@
 #define SUBTRACTION 2
 #define ADDITION 3
 #define LOGGER 0
+int counter = 0;
 
 ASPR flags;
 enum OFType { OF_ADD, OF_SUB, OF_SHIFT };
@@ -317,12 +318,10 @@ int countOneBits(unsigned int instruction) {
 }
 //LOOK AT MATT, 167 dont like the -4 but need in in the last line, WORKS FOR FIB
 void pushRegistersOntoStack(MISC_Type misc) {
-   unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list);
+   unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list) + 1;
    unsigned int spAddress = SP - 4 * numberOfRegisters;
    unsigned int i, mask;
    
-   rf.write(LR_REG, SP);
-
    /* pg167 I am using 8 because thumb has 
       8 registers in the list. The document
       says to use 14, so this may cause a problem 
@@ -330,18 +329,25 @@ void pushRegistersOntoStack(MISC_Type misc) {
     */
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.push.reg_list & mask) {
+      if(LOGGER)cout<< "ADDRESS: " << spAddress << "   VALUE: " << rf[i] << endl;
          dmem.write(spAddress, rf[i]);
          spAddress += 4;
       }
    }
-
-   rf.write(SP_REG, SP - 4 * numberOfRegisters - 4);
+    if(LOGGER)cout<< "LR (STACK) ADDRESS: " << spAddress << "   LR VALUE: " << LR << endl;
+   dmem.write(spAddress, LR);
+   rf.write(SP_REG, SP - 4 * numberOfRegisters);
 }
 //LOOK AT MATT, SAME ISSUE AS POP, WORKS FOR FIB
 void popRegistersOffOfStack(MISC_Type misc) {
-   unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list);
+   unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list) + 1;
    unsigned int spAddress = SP;
    unsigned int i, mask;
+   if(LOGGER) {
+         cout << "\nPOP TOP: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 <<"\n";
+         cout << "SP: " << SP  << "\n";
+         cout << "LR: " << LR << "\n";
+   }
    
    //pop it says to use 0 - 7
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
@@ -358,9 +364,15 @@ void popRegistersOffOfStack(MISC_Type misc) {
       
       */
    }
-
-   rf.write(SP_REG, SP + 4 * numberOfRegisters + 4);
+   rf.write(LR_REG, dmem[spAddress]);
+   rf.write(SP_REG, SP + 4 * numberOfRegisters);
    rf.write(PC_REG, LR);
+   
+   if(LOGGER) {
+         cout << "\nPOP BOT: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 << "\n";
+         cout << "SP: " << SP  << "\n";
+         cout << "LR: " << LR << "\n";
+   }
 }
 
 //good
@@ -399,11 +411,12 @@ void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
    else if(dp_ops == DP_RSB) {
    }
    else*/ if(dp_ops == DP_CMP) {
+   
       int arg1 = rf[dp.instr.dp.rdn];
       int arg2 = rf[dp.instr.dp.rm];
       result = arg1 - arg2;
       
-      //cout << arg1 << "   " << arg2 << endl; 
+      //cout << "arg1: " << arg1 << "   arg2: " << arg2 << " counter: " << counter++ << endl; 
       
       if(result < 0) {
          flags.N = 1;
@@ -438,7 +451,7 @@ void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
 
 void execute() {
    Data16 instr = imem[PC];
-   if(LOGGER) {
+   if(LOGGER && 0) {
       cout << "\nPC: 0x" << setfill('0') << setw(8) << hex << PC << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
       cout << "SP: " << SP  << "\n";
       cout << "LR: " << LR << "\n";
@@ -534,18 +547,52 @@ void execute() {
       case DP:
          dp_ops = decode(dp);
          handleDPOps(dp_ops, dp);
-         
+         break;
       case SPECIAL:
          sp_ops = decode(sp);
          switch(sp_ops) {
             case SP_MOV:
-               updateFlagsMOV(sp.instr.mov.rm);
-               if (sp.instr.mov.d) {
-                  rf.write(SP_REG, rf[sp.instr.mov.rm]);
+               if(sp.instr.mov.d == 1 && sp.instr.mov.d + 8 == 15) {
+                  cout <<"PLEASE DONT EVER BE TRUE!!!\n";
+               }
+               else if (sp.instr.mov.d == 1) {
+                  rf.write(sp.instr.mov.rd + 8, rf[sp.instr.mov.rm]);
                }
                else {
+                  updateFlagsMOV(sp.instr.mov.rm);
                   rf.write(sp.instr.mov.rd, rf[sp.instr.mov.rm]);
                }
+               break;
+            case SP_CMPR:
+            {
+               unsigned int dBit = 0;
+               if(sp.instr.cmp.d == 1) {
+                  dBit = 8;
+               }
+               int arg1 = rf[sp.instr.cmp.rd + dBit];
+               int arg2 = rf[sp.instr.cmp.rm];
+               int result = arg1 - arg2;
+               
+             //  cout << "arg1: " << arg1 << "   arg2: " << arg2 << " counter: " << counter++ << endl; 
+               
+               if(result < 0) {
+                  flags.N = 1;
+               }
+               else {
+                  flags.N = 0;
+               }
+               
+               if(result == 0) {
+                  flags.Z = 1;
+               }
+               else {
+                  flags.Z = 0;
+               }
+                  setCarryOverflow(arg1, arg2, OF_SUB);
+            }
+               break;
+            case SP_ADD: 
+               rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
                break;
          }
          break;
@@ -562,22 +609,51 @@ void execute() {
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm * 4;
                rf.write(ld_st.instr.ld_st_imm.rt, dmem[addr]);
                break;
-               
+            //FOR LDRBU AND STRBI MAY NEED TO WRITE BACK TO RN 180   
             case LDRBI:
-               cout << "**LDRBI\n";
+               addr = rf[ld_st.instr.ld_st_imm.rn] + rf[ld_st.instr.ld_st_imm.imm];
+               addr = dmem[addr];
+               rf.write(ld_st.instr.ld_st_imm.rt, signExtend8to32ui((addr & 0x00FF)));
                break;
-
             case STRBI:
-               cout << "**STRBI\n";
-               break;
-            
+            {
+               addr = rf[ld_st.instr.ld_st_imm.rn] + rf[ld_st.instr.ld_st_imm.imm];
+               unsigned int addr2 = dmem[addr];
+               addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_imm.rt] & 0x000000FF));
+               dmem.write(addr, addr2);
+            }                     
+             break;
+            //BROKEN
             case LDRBR:
-               cout << "**LDRBR\n";
+               /*if(flags.c == 1) {
+                  cout<<" MAY NEED TO DO SOMETHING PAGE 145 ";
+               }*/
+               
+               /* Top Byte
+               addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               addr = dmem[addr];
+               rf.write(ld_st.instr.ld_st_reg.rt, signExtend8to32ui((addr & 0xFF000000) >> 24));
+               */
+               addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               addr = dmem[addr];
+               rf.write(ld_st.instr.ld_st_reg.rt, signExtend8to32ui((addr & 0x00FF)));
                break;
             case STRBR:
-               cout << "**STRBRn";
-               break;
+            {
+               addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               //cout << "*****************\n";
+              // cout << hex << dmem[addr] << endl;
                
+               unsigned int addr2 = dmem[addr];
+               addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_reg.rt] & 0x000000FF));
+               //cout << hex << addr2 << endl;
+               dmem.write(addr, addr2);
+               
+               //cout << hex << dmem[addr] << endl;
+               //cout << "*****************\n";
+               break;
+            }
+            break;
             case LDRR:
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
                rf.write(ld_st.instr.ld_st_reg.rt, dmem[addr]);
@@ -620,26 +696,36 @@ void execute() {
          rf.write(PC_REG, PC + 2 * signExtend8to32ui(uncond.instr.b.imm) + 2);
          break;
       case LDM:
+      {
          //Stephen not sure and not need for fib
          decode(ldm);
-         cout << "LDM_STEPHEN\n";
-         exit(0);
+         
+         int counter = 0;
+         for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
+            if(ldm.instr.ldm.reg_list & mask) {
+               rf.write(i, dmem[rf[ldm.instr.ldm.rn] + counter]);
+               counter += 4;
+            }
+         }  
+
+         rf.write(ldm.instr.ldm.rn, rf[ldm.instr.ldm.rn] + 4 * countOneBits(ldm.instr.ldm.reg_list));
+       }  
          break;
       case STM:
       {   
          decode(stm);
-         cout << "NOT IN SHA O0\n";
-         exit(0);  
+ 
          int counter = 0;
          for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
-            if(misc.instr.push.reg_list & mask) {
+            if(stm.instr.stm.reg_list & mask) {
                dmem.write(rf[stm.instr.stm.rn] + counter, rf[i]);
                counter += 4;
             }
          }  
          // may not need to write back pg 175
-         rf.write(stm.instr.stm.rn, stm.instr.stm.rn + 4 * countOneBits(stm.instr.stm.reg_list));
-      }   break;
+         rf.write(stm.instr.stm.rn, rf[stm.instr.stm.rn] + 4 * countOneBits(stm.instr.stm.reg_list));
+      }   
+      break;
       //************************************************************************
       //MAT LOOK AT, PAGE 141 I think we need the PC + what do you think?
       case LDRL:
@@ -653,6 +739,11 @@ void execute() {
          rf.write(addsp.instr.add.rd, SP + (addsp.instr.add.imm*4));
          break;
       case BL:
+         if(LOGGER) {
+         cout << "\nBL TOP: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
+         cout << "SP: " << SP  << "\n";
+         cout << "LR: " << LR << "\n";
+         }
          bl_ops = decode(blupper);
          if (bl_ops == BL_UPPER) {
            // PC has already been incremented above
@@ -677,6 +768,12 @@ void execute() {
          else {
            cerr << "Bad BL format." << endl; exit(1); 
          }
+         
+        if(LOGGER) {
+         cout << "\nBL BOT: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
+         cout << "SP: " << SP  << "\n";
+         cout << "LR: " << LR << "\n";
+         }
        break; 
       default:
          cout << "[ERROR] Unknown Instruction to be executed" << endl;
@@ -684,8 +781,8 @@ void execute() {
          break;
    }
    
-      if(LOGGER) {
-      cout << "SP = d(13), LR = e(14), PC = f(15)";
+      if(LOGGER && 0) {
+      cout << "SP = d(13), LR = e(14), PC = f(15)\n";
          for(int i = 0; i < 16; i++) {
             cout << "Register " << i << ": " << rf[i]<< endl;
          }
