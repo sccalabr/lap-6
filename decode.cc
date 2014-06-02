@@ -378,6 +378,7 @@ LD_ST_Ops decode (const LD_ST_Type data) {
       }
       //Might not ever use this?
       else if (data.instr.class_type.opB == LD_ST_OPB_LDRB){
+         cout<< "***************************\n";
          if (opts.instrs) {        
             cout << "ldrb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
          }
@@ -391,7 +392,19 @@ LD_ST_Ops decode (const LD_ST_Type data) {
       }
    }
    else if (data.instr.class_type.opA == LD_ST_IMMB_OPA) {
-   cout << "==>add 23\n";
+   cout << "HERE\n";
+      if (data.instr.class_type.opB == LD_ST_OPB_LDR){           
+         if (opts.instrs) {        
+            cout << "ldrb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
+         }
+         return LDRBI;
+      }
+      else if (data.instr.class_type.opB == LD_ST_OPB_STR){
+         if (opts.instrs) {
+            cout << "strb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
+         }
+         return STRBI;
+      }
    }
    else if (data.instr.class_type.opA == LD_ST_IMMH_OPA) {
    cout << "==>add 24\n";
@@ -486,12 +499,12 @@ int decode (const UNCOND_Type data) {
 int decode (const LDM_Type data) {
    unsigned int reg = data.instr.ldm.rn ;
    if (opts.instrs) {
-      cout << "ldm r!" << reg;
+      cout << "ldm r" << reg << "!";
       if((data.instr.ldm.reg_list & (1 << reg)) == 1) {
          cout << "!, {";
       }
       else { 
-         cout <<  ", ";
+         cout <<  ", {";
       }
       
       printRegisterList(data.instr.ldm.reg_list, FALSE);
