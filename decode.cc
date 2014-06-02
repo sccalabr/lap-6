@@ -309,18 +309,23 @@ SP_Ops decode (const SP_Type data) {
    if (data.instr.mov.op == 2) {
       if (opts.instrs) { 
          cout << "mov";
-         if (data.instr.mov.d) {
+         /*if (data.instr.mov.d) {
             cout << " sp, r" << data.instr.mov.rm << endl;
          }
-         else {
+         else {*/
             cout << " r" << data.instr.mov.rd << ", r" << data.instr.mov.rm << endl;
-         }
+         //}
       }
       return SP_MOV;
    }//using cmp reg on page 129 encoding 2
    else if(data.instr.cmp.op == 1) {
-      cout << "cmp r" << data.instr.cmp.rd << ", " << data.instr.cmp.rm <<endl ;
+      cout << "cmp r" << data.instr.cmp.rd << ", " << data.instr.cmp.rm <<endl;
       return SP_CMPR;
+   }
+   else if(data.instr.add.op == 0) {
+      if (opts.instrs) {
+         cout << "add sp, sp, r" << data.instr.cmp.rm << endl;
+      }return SP_ADD;
    }
    else {
       if (opts.instrs) { 
@@ -346,11 +351,15 @@ LD_ST_Ops decode (const LD_ST_Type data) {
       }
       //Might not ever use this?
       else if (data.instr.class_type.opB == LD_ST_OPB_LDRB){
+         if (opts.instrs) {
          cout << "ldrb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ", r" << data.instr.ld_st_reg.rm << "]" << endl;
+         }
          return LDRBR;
       }
       else if (data.instr.class_type.opB == LD_ST_OPB_STRB){
-         cout << "strb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ", r" << data.instr.ld_st_reg.rm << "]" << endl;
+         if (opts.instrs) {
+            cout << "strb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ", r" << data.instr.ld_st_reg.rm << "]" << endl;
+         }
          return STRBR;
       }
    }
@@ -369,11 +378,15 @@ LD_ST_Ops decode (const LD_ST_Type data) {
       }
       //Might not ever use this?
       else if (data.instr.class_type.opB == LD_ST_OPB_LDRB){
-         cout << "ldrb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
+         if (opts.instrs) {        
+            cout << "ldrb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
+         }
          return LDRBI;
       }
       else if (data.instr.class_type.opB == LD_ST_OPB_STRB){
-         cout << "strb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
+         if (opts.instrs) {
+            cout << "strb r" << data.instr.ld_st_reg.rt << ", [r" << data.instr.ld_st_reg.rn << ",  #" << setbase(10) << (data.instr.ld_st_imm.imm) << "]" << endl;
+         }
          return STRBI;
       }
    }
@@ -473,9 +486,9 @@ int decode (const UNCOND_Type data) {
 int decode (const LDM_Type data) {
    unsigned int reg = data.instr.ldm.rn ;
    if (opts.instrs) {
-      cout << "ldm r" << reg;
+      cout << "ldm r!" << reg;
       if((data.instr.ldm.reg_list & (1 << reg)) == 1) {
-         cout << "!, ";
+         cout << "!, {";
       }
       else { 
          cout <<  ", ";
@@ -483,7 +496,7 @@ int decode (const LDM_Type data) {
       
       printRegisterList(data.instr.ldm.reg_list, FALSE);
       
-      cout << endl;
+      cout << "}"<< endl;
    }
    return LDM_TYPE;
 }
@@ -503,7 +516,7 @@ int decode (const STM_Type data) {
 
 int decode (const LDRL_Type data) {
    if (opts.instrs)
-      cout << "ldrl r" << data.instr.ldrl.rt << ", #" << setbase(10) << data.instr.ldrl.imm* 4 << endl;
+      cout << "ldrl r" << data.instr.ldrl.rt << ", [pc, #" << setbase(10) << data.instr.ldrl.imm* 4 << "]\n";
    
    return LDRL_TYPE;
 }
