@@ -738,12 +738,27 @@ void execute() {
       break;
       //************************************************************************
       //MAT LOOK AT, PAGE 141 I think we need the PC + what do you think?
-      case LDRL:
-         //Stephen
-         decode(ldrl);
-         addr = PC + (ldrl.instr.ldrl.imm*4);
-         rf.write(ldrl.instr.ldrl.rt, dmem[addr]);
-         break;
+         case LDRL:
+      decode(ldrl);  // you'll need to define ldrl as an LDRL_Type, and call the first decode earlier
+                     // LDRL_Type ldrl(instr);
+      // Need to check for alignment by 4
+      if (PC & 2) {
+        addr = PC + 2 + (ldrl.instr.ldrl.imm)*4;
+      }
+      else {
+        addr = PC + (ldrl.instr.ldrl.imm)*4;
+      }
+      // Requires two consecutive imem locations pieced together
+      temp = imem[addr] | (imem[addr+2]<<16);  // temp is a Data32
+      rf.write(ldrl.instr.ldrl.rt, temp);
+      
+      // One write for updated reg
+      stats.numRegWrites++;
+      // One read of the PC
+      stats.numRegReads++;
+      // One mem read, even though it's imem, and there's two of them
+      stats.numMemReads++;
+      break;
       case ADD_SP:
          decode(addsp);
          rf.write(addsp.instr.add.rd, SP + (addsp.instr.add.imm*4));
