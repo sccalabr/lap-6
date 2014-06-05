@@ -599,7 +599,12 @@ void execute() {
                   cout <<"PLEASE DONT EVER BE TRUE!!!\n";
                }
                else if (sp.instr.mov.d == 1) {
-                  rf.write(sp.instr.mov.rd + 8, rf[sp.instr.mov.rm]);
+                 if (sp.instr.mov.rd + 8 == SP_REG) {
+                   rf.write(SP_REG, rf[sp.instr.mov.rm]);                   
+                 }
+                 else {
+                   rf.write(sp.instr.mov.rd, rf[sp.instr.mov.rm]);
+                 }
                   stats.numRegReads++;
                   stats.numRegWrites++;
                }
@@ -639,6 +644,17 @@ void execute() {
             }
             break;
             case SP_ADD: 
+              if (sp.instr.add.d == 1) {
+                if (sp.instr.mov.rd + 8 == SP_REG) { 
+                  rf.write(SP_REG, SP + rf[sp.instr.add.rd]);
+                }
+                else {
+                  rf.write(rf[sp.instr.add.rd], rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
+                }
+              }
+              else {
+                rf.write(rf[sp.instr.add.rd], rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
+              }
                rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
                stats.numRegReads++;
                stats.numRegReads++;

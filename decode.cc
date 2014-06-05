@@ -336,17 +336,17 @@ SP_Ops decode (const SP_Type data) {
       if (opts.instrs) {
         if (data.instr.add.d == 1) {
           if (data.instr.mov.rd + 8 == 13) { 
-            cout << "add sp, sp, r" << data.instr.cmp.rm << endl;
+            cout << "add sp, sp, r" << data.instr.add.rm << endl;
           }
           else {
             cout << "add r" << data.instr.add.rd + 8 << ", r" << data.instr.add.rd + 8
-              << ", r" << data.instr.cmp.rm << endl;
+              << ", r" << data.instr.add.rm << endl;
           }
         }
         else {
 //             cout << "SP_ADD case 3" << endl;
          cout << "add r" << data.instr.add.rd << ", r" << data.instr.add.rd
-            << ", r" << data.instr.cmp.rm << endl;
+            << ", r" << data.instr.add.rm << endl;
         }
       }return SP_ADD;
    }
