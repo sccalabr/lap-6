@@ -310,7 +310,12 @@ SP_Ops decode (const SP_Type data) {
       if (opts.instrs) { 
          cout << "mov";
          if (data.instr.mov.d == 1) {
-            cout << " r" << data.instr.mov.rd + 8 << ", r" << data.instr.mov.rm << endl;
+           if (data.instr.mov.rd + 8 == 13) {
+             cout << " sp, r" << data.instr.mov.rm << endl;
+           }
+           else {
+              cout << " r" << data.instr.mov.rd + 8 << ", r" << data.instr.mov.rm << endl;
+           }
          }
          else {
             cout << " r" << data.instr.mov.rd << ", r" << data.instr.mov.rm << endl;
@@ -327,9 +332,22 @@ SP_Ops decode (const SP_Type data) {
       cout << "cmp r" << data.instr.cmp.rd + dBit << ", r" << data.instr.cmp.rm <<endl;
       return SP_CMPR;
    }
-   else if(data.instr.add.op == 0) {
+   else if(data.instr.add.op == 0) {      
       if (opts.instrs) {
-         cout << "add sp, sp, r" << data.instr.cmp.rm << endl;
+        if (data.instr.add.d == 1) {
+          if (data.instr.mov.rd + 8 == 13) { 
+            cout << "add sp, sp, r" << data.instr.cmp.rm << endl;
+          }
+          else {
+            cout << "add r" << data.instr.add.rd + 8 << ", r" << data.instr.add.rd + 8
+              << ", r" << data.instr.cmp.rm << endl;
+          }
+        }
+        else {
+//             cout << "SP_ADD case 3" << endl;
+         cout << "add r" << data.instr.add.rd << ", r" << data.instr.add.rd
+            << ", r" << data.instr.cmp.rm << endl;
+        }
       }return SP_ADD;
    }
    else {
@@ -522,7 +540,7 @@ int decode (const STM_Type data) {
    unsigned int reg = data.instr.stm.rn ;
 
    if (opts.instrs)    {
-      cout << "stmia r" << reg << "!, {";
+      cout << "stm r" << reg << "!, {";
       
       printRegisterList(data.instr.stm.reg_list, FALSE);
       
@@ -533,7 +551,7 @@ int decode (const STM_Type data) {
 
 int decode (const LDRL_Type data) {
    if (opts.instrs)
-      cout << "ldrl r" << data.instr.ldrl.rt << ", [pc, #" << setbase(10) << data.instr.ldrl.imm* 4 << "]\n";
+      cout << "ldr r" << data.instr.ldrl.rt << ", [pc, #" << setbase(10) << data.instr.ldrl.imm* 4 << "]\n";
    
    return LDRL_TYPE;
 }
