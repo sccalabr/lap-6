@@ -1,13 +1,14 @@
 #include "thumbsim.hpp"
 #include "unistd.h"
-
 #define DEFAULT_CACHE_SIZE 256
+#define Logger
 
 Memory<Data16,Data16> imem(0x8000);
 Memory<Data8,Data32> dmem(0xffff0000);
 Memory<Data32,Data32> rf(16, Data32(0));
 Register pc;
 Options opts;
+
 Caches caches = Caches(DEFAULT_CACHE_SIZE);
 Stats stats;
 
@@ -20,6 +21,7 @@ int main(int argc, char ** argv) {
       opts.program = true;
       break;
     case 'd':
+    cout << "opts dump should be true\n";
       opts.dump = true;
       break;
     case 'i':
@@ -56,10 +58,12 @@ int main(int argc, char ** argv) {
   cout << "Starting at PC " << hex << pc << endl;
   rf.write(15, pc);
   while(imem.inRange(rf[15])) {
-    caches.access(rf[15]); 
-    execute();
+      //cout << "--TOP--";
+      caches.access(rf[15]); 
+      execute();
+      //cout << "==BOTTOM==\n\n";
   }
-
+  
   if (opts.dump) {
     cout << "DATA:" << endl;
     dmem.dump(DATA);

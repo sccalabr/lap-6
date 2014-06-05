@@ -1,0 +1,3976 @@
+Starting at PC 8828
+--TOP--
+push {r7, lr}
+==BOTTOM==
+
+--TOP--
+ldrl r7, #28
+==BOTTOM==
+
+--TOP--
+nop
+==BOTTOM==
+
+--TOP--
+add r7, sp, #0
+==BOTTOM==
+
+--TOP--
+movs r3, #0
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+b 0x12
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+ldrl r3, #12
+==BOTTOM==
+
+--TOP--
+movs r2, #136
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+adds r3, r2, r3
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+ldr r2, [r1, #0]
+==BOTTOM==
+
+--TOP--
+adds r2, #230
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #2
+==BOTTOM==
+
+--TOP--
+movs r1, #1
+==BOTTOM==
+
+--TOP--
+str r1, [r2, r3]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r3, #1
+==BOTTOM==
+
+--TOP--
+ldrl r1, #4
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+ldrl r2, #8
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+cmp r3, #39
+==BOTTOM==
+
+--TOP--
+ble 0xe7
+==BOTTOM==
+
+--TOP--
+adds r3, r7, #0
+==BOTTOM==
+
+--TOP--
+adds r0, r3, #0
+==BOTTOM==
+
+--TOP--
+movs r1, #0
+==BOTTOM==
+
+--TOP--
+==BOTTOM==
+
+--TOP--
+lsrs r0, r0, #0
+==BOTTOM==
+
+--TOP--
+adds r3, r0, #0
+==BOTTOM==
+
+--TOP--
+movs r1, #87
+==BOTTOM==
+
+--TOP--
+lsrs r1, r1, #3
+==BOTTOM==
+
+--TOP--
+adds r1, r1, r7
+==BOTTOM==
+
+--TOP--
+str r3, [r1, #0]
+==BOTTOM==
+
+--TOP--
+movs r2, #135
+==BOTTOM==
+
+--TOP--
+lsrs r2, r2, #3
+==BOTTOM==
+
+--TOP--
+adds r2, r2, r7
+==BOTTOM==
+
+--TOP--
+ldr r3, [r2, #0]
+==BOTTOM==
+
+--TOP--
+adds r0, r3, #0
+==BOTTOM==
+
+--TOP--
+mov sp, r7
+==BOTTOM==
+
+--TOP--
+movs r3, #136
+==BOTTOM==
+
+--TOP--
+lsrs r3, r3, #3
+==BOTTOM==
+
+--TOP--
+nop
+==BOTTOM==
+
+--TOP--
+pop {r7, pc}
+==BOTTOM==
+

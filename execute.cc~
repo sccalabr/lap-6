@@ -338,13 +338,11 @@ void pushRegistersOntoStack(MISC_Type misc) {
       if(misc.instr.push.reg_list & mask) {
       if(LOGGER)cout<< "ADDRESS: " << spAddress << "   VALUE: " << rf[i] << endl;
          dmem.write(spAddress, rf[i]);
-         stats.numMemWrites++;
          spAddress += 4;
       }
    }
     if(LOGGER)cout<< "LR (STACK) ADDRESS: " << spAddress << "   LR VALUE: " << LR << endl;
    dmem.write(spAddress, LR);
-   stats.numMemWrites++;
    rf.write(SP_REG, SP - 4 * numberOfRegisters);
 }
 //LOOK AT MATT, SAME ISSUE AS POP, WORKS FOR FIB
@@ -361,8 +359,8 @@ void popRegistersOffOfStack(MISC_Type misc) {
    //pop it says to use 0 - 7
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.pop.reg_list & mask) {
+ 
          rf.write(i, dmem[spAddress]);
-         stats.numMemReads++;
          spAddress += 4;
       }
       /* PAGE 166, Do not think that it is needed but 
@@ -374,7 +372,6 @@ void popRegistersOffOfStack(MISC_Type misc) {
       */
    }
    rf.write(LR_REG, dmem[spAddress]);
-   stats.numMemReads++;
    rf.write(SP_REG, SP + 4 * numberOfRegisters);
    rf.write(PC_REG, LR);
    
@@ -460,8 +457,6 @@ void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
 }
 
 void execute() {
-   stats.instrs++;
-
    Data16 instr = imem[PC];
    if(LOGGER && 0) {
       cout << "\nPC: 0x" << setfill('0') << setw(8) << hex << PC << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
@@ -623,19 +618,16 @@ void execute() {
             case STRI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm * 4;
                dmem.write(addr, rf[ld_st.instr.ld_st_imm.rt]);
-               stats.numMemWrites++;
                break;
             case LDRI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm * 4;
                rf.write(ld_st.instr.ld_st_imm.rt, dmem[addr]);
-               stats.numMemReads++;
                break;
             //FOR LDRBU AND STRBI MAY NEED TO WRITE BACK TO RN 180   
             case LDRBI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm;
                addr = dmem[addr];
                rf.write(ld_st.instr.ld_st_imm.rt, signExtend8to32ui((addr & 0x00FF)));
-               stats.numMemReads++;
                break;
             case STRBI:
             {
@@ -643,8 +635,6 @@ void execute() {
                unsigned int addr2 = dmem[addr];
                addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_imm.rt] & 0x000000FF));
                dmem.write(addr, addr2);
-               stats.numMemReads++;
-               stats.numMemWrites++;
             }                     
              break;
             case LDRBR:
@@ -659,7 +649,6 @@ void execute() {
                */
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
                addr = dmem[addr];
-               stats.numMemReads++;
                rf.write(ld_st.instr.ld_st_reg.rt, signExtend8to32ui((addr & 0x00FF)));
                break;
             case STRBR:
@@ -669,11 +658,9 @@ void execute() {
               // cout << hex << dmem[addr] << endl;
                
                unsigned int addr2 = dmem[addr];
-               stats.numMemReads++;
                addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_reg.rt] & 0x000000FF));
                //cout << hex << addr2 << endl;
                dmem.write(addr, addr2);
-               stats.numMemWrites++;
                
                //cout << hex << dmem[addr] << endl;
                //cout << "*****************\n";
@@ -683,13 +670,11 @@ void execute() {
             case LDRR:
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
                rf.write(ld_st.instr.ld_st_reg.rt, dmem[addr]);
-               stats.numMemReads++;
                //cout << "**LDRR\n";
                break;
             case STRR:
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
                dmem.write(addr, rf[ld_st.instr.ld_st_reg.rt]);
-               stats.numMemWrites++;
                //cout << "**STRR\n";
                break;
          }
@@ -732,7 +717,6 @@ void execute() {
          for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
             if(ldm.instr.ldm.reg_list & mask) {
                rf.write(i, dmem[rf[ldm.instr.ldm.rn] + counter]);
-               stats.numMemReads++;
                counter += 4;
             }
          }  
@@ -749,7 +733,6 @@ void execute() {
             if(stm.instr.stm.reg_list & mask) {
                dmem.write(rf[stm.instr.stm.rn] + counter, rf[i]);
                counter += 4;
-               stats.numMemWrites++;
             }
          }  
          // may not need to write back pg 175
@@ -760,7 +743,7 @@ void execute() {
       //MAT LOOK AT, PAGE 141 I think we need the PC + what do you think?
          case LDRL:
       decode(ldrl);  // you'll need to define ldrl as an LDRL_Type, and call the first decode earlier
-      {               // LDRL_Type ldrl(instr);
+                     // LDRL_Type ldrl(instr);
       // Need to check for alignment by 4
       if (PC & 2) {
         addr = PC + 2 + (ldrl.instr.ldrl.imm)*4;
@@ -769,7 +752,7 @@ void execute() {
         addr = PC + (ldrl.instr.ldrl.imm)*4;
       }
       // Requires two consecutive imem locations pieced together
-      Data32 temp = imem[addr] | (imem[addr+2]<<16);  // temp is a Data32
+      temp = imem[addr] | (imem[addr+2]<<16);  // temp is a Data32
       rf.write(ldrl.instr.ldrl.rt, temp);
       
       // One write for updated reg
@@ -778,7 +761,6 @@ void execute() {
       stats.numRegReads++;
       // One mem read, even though it's imem, and there's two of them
       stats.numMemReads++;
-      }
       break;
       case ADD_SP:
          decode(addsp);
