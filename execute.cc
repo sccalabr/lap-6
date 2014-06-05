@@ -12,12 +12,15 @@
 #define SUBTRACTION 2
 #define ADDITION 3
 #define LOGGER 0
+#define TAKEN 0
+#define NOT_TAKEN 1
 int counter = 0;
 
 ASPR flags;
 enum OFType { OF_ADD, OF_SUB, OF_SHIFT };
 
-//assumed to be good
+
+
 void setCarryOverflow (int num1, int num2, OFType oftype) {
 
   switch (oftype) {
@@ -75,19 +78,19 @@ void setCarryOverflow (int num1, int num2, OFType oftype) {
       exit(1);
   }
 }
-//good
+
 unsigned int signExtend16to32ui(short i) {
    return static_cast<unsigned int>(static_cast<int>(i));
 }
-//good
+
 unsigned int signExtend8to32ui(char i) {
    return static_cast<unsigned int>(static_cast<int>(i));
 }
-//*********************************************************
-//LOOK AT, MATT Do you think a cmp would get a OF_SUB TYPE?
-//*********************************************************
+
 void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
    int regValue = rf[alu.instr.cmp.rdn];
+   stats.numRegReads++;
+
    int immValue = alu.instr.cmp.imm;
    int difference = regValue - immValue;
 
@@ -106,10 +109,11 @@ void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
    
    setCarryOverflow(regValue, immValue, OF_SUB);
 }
-//good
+
 void updateFlagsRegisterADDSUBRegisterImmmediate(ALU_Type alu, int operation, int flag) {
    // add and sub should have the same layout
    int regValue = flag == 3 ? rf[alu.instr.add3i.rn] : rf[alu.instr.add8i.rdn];
+   stats.numRegReads++;
    int immValue = flag == 3 ? alu.instr.add3i.imm : alu.instr.add8i.imm;
    int difference;
    
@@ -140,11 +144,13 @@ void updateFlagsRegisterADDSUBRegisterImmmediate(ALU_Type alu, int operation, in
       setCarryOverflow(regValue, immValue, OF_SUB);
    }
 }
-//good
+
 void updateFlagsRegisterADDSUBRegisterRegister(ALU_Type alu, int operation) {
    // add and sub should have the same layout
    int regValue = rf[alu.instr.addr.rn];
+   stats.numRegReads++;
    int regValue2 = rf[alu.instr.addr.rm];
+   stats.numRegReads++;
    int difference;
    
    if(operation == ADDITION) {
@@ -174,10 +180,11 @@ void updateFlagsRegisterADDSUBRegisterRegister(ALU_Type alu, int operation) {
       setCarryOverflow(regValue, regValue2, OF_SUB);
    }
 }
-//good
+
 void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftType) {
    //lsl and lsr should have the same layout
    int regValue = rf[alu.instr.lsli.rm];
+   stats.numRegReads++;
    int immValue = alu.instr.lsli.imm;
    int difference;
    
@@ -206,9 +213,8 @@ void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftTyp
    
    setCarryOverflow(regValue, immValue, OF_SHIFT);
 }
-//good
+
 void updateFlagsMOV(int number) {
-   //lsl and lsr should have the same layout
    int immValue = number;
 
    if(immValue == 0) {
@@ -223,6 +229,31 @@ void updateFlagsMOV(int number) {
    else {
       flags.N = 0;
    }
+}
+
+void doBranchStatistics(unsigned int pc, unsigned int target, unsigned int takenFlag) {
+   if(takenFlag == TAKEN) {
+      if(target > pc) {
+         stats.numForwardBranchesTaken++;
+      }
+      
+      else {
+         stats.numBackwardBranchesTaken++;
+      }
+   }
+   else if(takenFlag == NOT_TAKEN) {
+            if(target > pc) {
+         stats.numForwardBranchesNotTaken++;
+      }
+      
+      else {
+         stats.numBackwardBranchesNotTaken++;
+      }
+   }
+   else {
+      cout <<"REALLLLLLY.......\n";
+   } 
+
 }
 
 // You're given the code for evaluating BEQ, 
@@ -307,7 +338,7 @@ static int checkCondition(unsigned short cond) {
    }
    return FALSE;
 }
-//good
+
 int countOneBits(unsigned int instruction) {
    //might not be needed
    //instruction &= 0x00FF;
@@ -319,14 +350,11 @@ int countOneBits(unsigned int instruction) {
 
    return counter;
 }
-/*****************************************************************************
 
-THIS MAY BE BROKEN ALONG WITH POP. MAKE A TEST CASE WITH TWO BL!!!
-
-*****************************************************************************/
 void pushRegistersOntoStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list) + 1;
    unsigned int spAddress = SP - 4 * numberOfRegisters;
+   stats.numRegReads++;
    unsigned int i, mask;
    
    /* pg167 I am using 8 because thumb has 
@@ -336,53 +364,40 @@ void pushRegistersOntoStack(MISC_Type misc) {
     */
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.push.reg_list & mask) {
-      if(LOGGER)cout<< "ADDRESS: " << spAddress << "   VALUE: " << rf[i] << endl;
          dmem.write(spAddress, rf[i]);
+         stats.numRegReads++;
          stats.numMemWrites++;
          spAddress += 4;
       }
    }
-    if(LOGGER)cout<< "LR (STACK) ADDRESS: " << spAddress << "   LR VALUE: " << LR << endl;
    dmem.write(spAddress, LR);
+   stats.numRegReads++;
    stats.numMemWrites++;
    rf.write(SP_REG, SP - 4 * numberOfRegisters);
+   stats.numRegWrites++;
 }
-//LOOK AT MATT, SAME ISSUE AS POP, WORKS FOR FIB
+
 void popRegistersOffOfStack(MISC_Type misc) {
    unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list) + 1;
    unsigned int spAddress = SP;
+   stats.numRegReads++;
    unsigned int i, mask;
-   if(LOGGER) {
-         cout << "\nPOP TOP: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 <<"\n";
-         cout << "SP: " << SP  << "\n";
-         cout << "LR: " << LR << "\n";
-   }
    
    //pop it says to use 0 - 7
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.pop.reg_list & mask) {
          rf.write(i, dmem[spAddress]);
+         stats.numRegWrites++;
          stats.numMemReads++;
          spAddress += 4;
       }
-      /* PAGE 166, Do not think that it is needed but 
-         including for reference later
-        
-        if registers<15> == '1' then
-            LoadWritePC(MemA[address,4]);
-      
-      */
    }
-   rf.write(LR_REG, dmem[spAddress]);
+
    stats.numMemReads++;
    rf.write(SP_REG, SP + 4 * numberOfRegisters);
-   rf.write(PC_REG, LR);
-   
-   if(LOGGER) {
-         cout << "\nPOP BOT: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 << "\n";
-         cout << "SP: " << SP  << "\n";
-         cout << "LR: " << LR << "\n";
-   }
+   stats.numRegWrites++;
+   rf.write(PC_REG, dmem[spAddress]);
+   stats.numRegWrites++;
 }
 
 //good
@@ -423,10 +438,10 @@ void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
    else*/ if(dp_ops == DP_CMP) {
    
       int arg1 = rf[dp.instr.dp.rdn];
+      stats.numRegReads++;
       int arg2 = rf[dp.instr.dp.rm];
+      stats.numRegReads++;
       result = arg1 - arg2;
-      
-      //cout << "arg1: " << arg1 << "   arg2: " << arg2 << " counter: " << counter++ << endl; 
       
       if(result < 0) {
          flags.N = 1;
@@ -463,11 +478,7 @@ void execute() {
    stats.instrs++;
 
    Data16 instr = imem[PC];
-   if(LOGGER && 0) {
-      cout << "\nPC: 0x" << setfill('0') << setw(8) << hex << PC << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
-      cout << "SP: " << SP  << "\n";
-      cout << "LR: " << LR << "\n";
-   }
+   stats.numRegReads++;
       
    Thumb_Types itype;
    unsigned int pctarget = PC + 2;
@@ -496,6 +507,7 @@ void execute() {
    BL_Ops bl_ops;
 
    rf.write(PC_REG, pctarget);
+   stats.numRegWrites++;
 
    itype = decode(ALL_Types(instr));
    switch(itype) {
@@ -506,39 +518,55 @@ void execute() {
                //Stephen
                updateFlagsRegisterAndImmediateValueLogicalShift(alu, LEFT_SHIFT);
                rf.write(alu.instr.lsli.rd, rf[alu.instr.lsli.rm] << alu.instr.lsli.imm);
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             case ALU_LSRI:
                //Stephen
                updateFlagsRegisterAndImmediateValueLogicalShift(alu, RIGHT_SHIFT);
                rf.write(alu.instr.lsri.rd, rf[alu.instr.lsri.rm] >> alu.instr.lsri.imm);
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             case ALU_ASRI:
                //Stephen
                cout << "THIS IS MORE THAN LIKELY WRONG!\n";
                exit(0);
                rf.write(alu.instr.asri.rd, rf[alu.instr.asri.rm] >> alu.instr.asri.imm);
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             case ALU_ADDR:
                //updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
                rf.write(alu.instr.addr.rd, rf[alu.instr.addr.rn] + rf[alu.instr.addr.rm]);
+               stats.numRegReads++;
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             case ALU_SUBR:
                //Stephen
                //updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
                rf.write(alu.instr.subr.rd, rf[alu.instr.subr.rn] - rf[alu.instr.subr.rm]);
+               stats.numRegReads++;
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             case ALU_ADD3I:
                updateFlagsRegisterADDSUBRegisterImmmediate(alu, ADDITION, 3);
                rf.write(alu.instr.add3i.rd, rf[alu.instr.add3i.rn] + alu.instr.add3i.imm);
+               stats.numRegWrites++;
                break;
             case ALU_SUB3I:
                //Stephen
                //updateFlagsRegisterADDSUBRegisterImmmediate(alu, SUBTRACTION, 3);
                rf.write(alu.instr.sub3i.rd, rf[alu.instr.sub3i.rn] - alu.instr.sub3i.imm);
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             case ALU_MOV:
                updateFlagsMOV(alu.instr.mov.imm);
                rf.write(alu.instr.mov.rdn, alu.instr.mov.imm);
+               stats.numRegWrites++;
                break;
             case ALU_CMP: 
                updateFlagsRegisterAndImmediateValueCMP(alu);
@@ -546,11 +574,14 @@ void execute() {
             case ALU_ADD8I:
                updateFlagsRegisterADDSUBRegisterImmmediate(alu, ADDITION, 8);
                rf.write(alu.instr.add8i.rdn, rf[alu.instr.add8i.rdn] + alu.instr.add8i.imm);
+               stats.numRegWrites++;
                break;
             case ALU_SUB8I:
                //Stephen
                updateFlagsRegisterADDSUBRegisterImmmediate(alu, SUBTRACTION, 8);
-               rf.write(alu.instr.sub8i.rdn, rf[alu.instr.sub8i.rdn] - alu.instr.sub8i.imm);               
+               rf.write(alu.instr.sub8i.rdn, rf[alu.instr.sub8i.rdn] - alu.instr.sub8i.imm); 
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             default:
                break;
@@ -569,10 +600,14 @@ void execute() {
                }
                else if (sp.instr.mov.d == 1) {
                   rf.write(sp.instr.mov.rd + 8, rf[sp.instr.mov.rm]);
+                  stats.numRegReads++;
+                  stats.numRegWrites++;
                }
                else {
                   updateFlagsMOV(sp.instr.mov.rm);
                   rf.write(sp.instr.mov.rd, rf[sp.instr.mov.rm]);
+                  stats.numRegReads++;
+                  stats.numRegWrites++;
                }
                break;
             case SP_CMPR:
@@ -582,11 +617,11 @@ void execute() {
                   dBit = 8;
                }
                int arg1 = rf[sp.instr.cmp.rd + dBit];
+               stats.numRegReads++;
                int arg2 = rf[sp.instr.cmp.rm];
+               stats.numRegReads++;
                int result = arg1 - arg2;
-               
-             //  cout << "arg1: " << arg1 << "   arg2: " << arg2 << " counter: " << counter++ << endl; 
-               
+
                if(result < 0) {
                   flags.N = 1;
                }
@@ -602,14 +637,12 @@ void execute() {
                }
                   setCarryOverflow(arg1, arg2, OF_SUB);
             }
-               break;
-/****************************************************************************
- * 
- * CHECK THIS CASE
- * 
- * *************************************************************************/
+            break;
             case SP_ADD: 
                rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
+               stats.numRegReads++;
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             default:
               cout << "MISSED A CASES\n";
@@ -622,75 +655,79 @@ void execute() {
          switch(ldst_ops) {
             case STRI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm * 4;
+               stats.numRegReads++;
                dmem.write(addr, rf[ld_st.instr.ld_st_imm.rt]);
+               stats.numRegReads++;
                stats.numMemWrites++;
                break;
             case LDRI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm * 4;
+               stats.numRegReads++;
                rf.write(ld_st.instr.ld_st_imm.rt, dmem[addr]);
+               stats.numRegWrites++;
                stats.numMemReads++;
                break;
-            //FOR LDRBU AND STRBI MAY NEED TO WRITE BACK TO RN 180   
             case LDRBI:
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm;
+               stats.numRegReads++;
                addr = dmem[addr];
                rf.write(ld_st.instr.ld_st_imm.rt, signExtend8to32ui((addr & 0x00FF)));
                stats.numMemReads++;
+               stats.numRegWrites++;
                break;
             case STRBI:
             {
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm;
+               stats.numRegReads++;
                unsigned int addr2 = dmem[addr];
                addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_imm.rt] & 0x000000FF));
+               stats.numRegReads++;
                dmem.write(addr, addr2);
                stats.numMemReads++;
                stats.numMemWrites++;
             }                     
              break;
             case LDRBR:
-               /*if(flags.c == 1) {
-                  cout<<" MAY NEED TO DO SOMETHING PAGE 145 ";
-               }*/
-               
-               /* Top Byte
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
-               addr = dmem[addr];
-               rf.write(ld_st.instr.ld_st_reg.rt, signExtend8to32ui((addr & 0xFF000000) >> 24));
-               */
-               addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               stats.numRegReads++;
+               stats.numRegReads++;
                addr = dmem[addr];
                stats.numMemReads++;
                rf.write(ld_st.instr.ld_st_reg.rt, signExtend8to32ui((addr & 0x00FF)));
+               stats.numRegWrites++;
                break;
             case STRBR:
             {
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
-               //cout << "*****************\n";
-              // cout << hex << dmem[addr] << endl;
+               stats.numRegReads++;
+               stats.numRegReads++;
                
                unsigned int addr2 = dmem[addr];
                stats.numMemReads++;
                addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_reg.rt] & 0x000000FF));
-               //cout << hex << addr2 << endl;
+               stats.numRegReads++;
                dmem.write(addr, addr2);
                stats.numMemWrites++;
                
-               //cout << hex << dmem[addr] << endl;
-               //cout << "*****************\n";
                break;
             }
             break;
             case LDRR:
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               stats.numRegReads++;
+               stats.numRegReads++;
                rf.write(ld_st.instr.ld_st_reg.rt, dmem[addr]);
                stats.numMemReads++;
-               //cout << "**LDRR\n";
+               stats.numRegWrites++;
                break;
             case STRR:
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
+               stats.numRegReads++;
+               stats.numRegReads++;
                dmem.write(addr, rf[ld_st.instr.ld_st_reg.rt]);
+               stats.numRegReads++;
                stats.numMemWrites++;
-               //cout << "**STRR\n";
+               stats.numRegWrites++;
                break;
          }
          break;
@@ -705,9 +742,13 @@ void execute() {
                break;
             case MISC_SUB:
                rf.write(SP_REG, SP - (misc.instr.sub.imm*4));
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
             case MISC_ADD:
                rf.write(SP_REG, SP + (misc.instr.add.imm*4));
+               stats.numRegReads++;
+               stats.numRegWrites++;
                break;
          }
          break;
@@ -716,12 +757,20 @@ void execute() {
          // Once you've completed the checkCondition function,
          // this should work for all your conditional branches.
          if (checkCondition(cond.instr.b.cond)){
+            doBranchStatistics(PC, PC + 2 * signExtend8to32ui(cond.instr.b.imm) + 2, TAKEN);
             rf.write(PC_REG, PC + 2 * signExtend8to32ui(cond.instr.b.imm) + 2);
+            stats.numRegReads++;
+            stats.numRegWrites++;
+         }
+         else {
+            doBranchStatistics(PC, PC + 2 * signExtend8to32ui(cond.instr.b.imm) + 2, NOT_TAKEN);
          }
          break;
       case UNCOND:
          decode(uncond);
          rf.write(PC_REG, PC + 2 * signExtend8to32ui(uncond.instr.b.imm) + 2);
+         stats.numRegReads++;
+         stats.numRegWrites++;
          break;
       case LDM:
       {
@@ -732,35 +781,42 @@ void execute() {
          for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
             if(ldm.instr.ldm.reg_list & mask) {
                rf.write(i, dmem[rf[ldm.instr.ldm.rn] + counter]);
+               stats.numRegReads++;
                stats.numMemReads++;
+               stats.numRegWrites++;
                counter += 4;
             }
          }  
 
          rf.write(ldm.instr.ldm.rn, rf[ldm.instr.ldm.rn] + 4 * countOneBits(ldm.instr.ldm.reg_list));
+         stats.numRegReads++;
+         stats.numRegWrites++;
        }  
          break;
       case STM:
       {   
          decode(stm);
- 
+         unsigned int addr = rf[stm.instr.stm.rn];
+         stats.numRegReads++;
          int counter = 0;
          for(int i = 0, mask = 1; i < 8; i++, mask <<= 1) {
             if(stm.instr.stm.reg_list & mask) {
-               dmem.write(rf[stm.instr.stm.rn] + counter, rf[i]);
+               dmem.write(addr + counter, rf[i]);
+               stats.numRegReads++;
                counter += 4;
                stats.numMemWrites++;
             }
          }  
          // may not need to write back pg 175
-         rf.write(stm.instr.stm.rn, rf[stm.instr.stm.rn] + 4 * countOneBits(stm.instr.stm.reg_list));
+         rf.write(stm.instr.stm.rn,  rf[stm.instr.stm.rn] + 4 * countOneBits(stm.instr.stm.reg_list));
+         stats.numRegReads++;
+         
+         
       }   
       break;
-      //************************************************************************
-      //MAT LOOK AT, PAGE 141 I think we need the PC + what do you think?
          case LDRL:
-      decode(ldrl);  // you'll need to define ldrl as an LDRL_Type, and call the first decode earlier
-      {               // LDRL_Type ldrl(instr);
+      decode(ldrl);  
+      {               
       // Need to check for alignment by 4
       if (PC & 2) {
         addr = PC + 2 + (ldrl.instr.ldrl.imm)*4;
@@ -783,13 +839,10 @@ void execute() {
       case ADD_SP:
          decode(addsp);
          rf.write(addsp.instr.add.rd, SP + (addsp.instr.add.imm*4));
+         stats.numRegReads++;
+         stats.numRegWrites++;
          break;
       case BL:
-         if(LOGGER) {
-         cout << "\nBL TOP: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
-         cout << "SP: " << SP  << "\n";
-         cout << "LR: " << LR << "\n";
-         }
          bl_ops = decode(blupper);
          if (bl_ops == BL_UPPER) {
            // PC has already been incremented above
@@ -808,17 +861,15 @@ void execute() {
            }
            // return address is 4-bytes away from the start of the BL insn 
            rf.write(LR_REG, PC + 2); 
+           stats.numRegReads++;
+           stats.numRegWrites++;
            // Target address is also computed from that point 
            rf.write(PC_REG, PC + 2 + addr); 
+           stats.numRegReads++;
+           stats.numRegWrites++;
          }
          else {
            cerr << "Bad BL format." << endl; exit(1); 
-         }
-         
-        if(LOGGER) {
-         cout << "\nBL BOT: PC: 0x" << setfill('0') << setw(8) << hex << PC - 2 << "    Instruction: 0x" << hex << instr.data_ushort() <<"\n";
-         cout << "SP: " << SP  << "\n";
-         cout << "LR: " << LR << "\n";
          }
        break; 
       default:
@@ -826,11 +877,4 @@ void execute() {
          //exit(1);
          break;
    }
-   
-      if(LOGGER && 0) {
-      cout << "SP = d(13), LR = e(14), PC = f(15)\n";
-         for(int i = 0; i < 16; i++) {
-            cout << "Register " << i << ": " << rf[i]<< endl;
-         }
-      }
 }
