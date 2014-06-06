@@ -89,7 +89,7 @@ unsigned int signExtend8to32ui(char i) {
 
 void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
    int regValue = rf[alu.instr.cmp.rdn];
-   stats.numRegReads++;
+//    stats.numRegReads++;
 
    int immValue = alu.instr.cmp.imm;
    int difference = regValue - immValue;
@@ -113,7 +113,7 @@ void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
 void updateFlagsRegisterADDSUBRegisterImmmediate(ALU_Type alu, int operation, int flag) {
    // add and sub should have the same layout
    int regValue = flag == 3 ? rf[alu.instr.add3i.rn] : rf[alu.instr.add8i.rdn];
-   stats.numRegReads++;
+//    stats.numRegReads++;
    int immValue = flag == 3 ? alu.instr.add3i.imm : alu.instr.add8i.imm;
    int difference;
    
@@ -148,7 +148,7 @@ void updateFlagsRegisterADDSUBRegisterImmmediate(ALU_Type alu, int operation, in
 void updateFlagsRegisterADDSUBRegisterRegister(ALU_Type alu, int operation) {
    // add and sub should have the same layout
    int regValue = rf[alu.instr.addr.rn];
-   stats.numRegReads++;
+//    stats.numRegReads++;
    int regValue2 = rf[alu.instr.addr.rm];
    stats.numRegReads++;
    int difference;
@@ -184,7 +184,7 @@ void updateFlagsRegisterADDSUBRegisterRegister(ALU_Type alu, int operation) {
 void updateFlagsRegisterAndImmediateValueLogicalShift(ALU_Type alu, int shiftType) {
    //lsl and lsr should have the same layout
    int regValue = rf[alu.instr.lsli.rm];
-   stats.numRegReads++;
+//    stats.numRegReads++;
    int immValue = alu.instr.lsli.imm;
    int difference;
    
@@ -365,7 +365,7 @@ void pushRegistersOntoStack(MISC_Type misc) {
    for(i = 0, mask = 1; i < 8; i++, mask <<= 1) {
       if(misc.instr.push.reg_list & mask) {
          dmem.write(spAddress, rf[i]);
-         stats.numRegReads++;
+//          stats.numRegReads++;
          stats.numMemWrites++;
          spAddress += 4;
       }
@@ -478,7 +478,7 @@ void execute() {
    stats.instrs++;
 
    Data16 instr = imem[PC];
-   stats.numRegReads++;
+//    stats.numRegReads++;
       
    Thumb_Types itype;
    unsigned int pctarget = PC + 2;
@@ -539,7 +539,7 @@ void execute() {
             case ALU_ADDR:
                //updateFlagsRegisterADDSUBRegisterRegister(alu, ADDITION);
                rf.write(alu.instr.addr.rd, rf[alu.instr.addr.rn] + rf[alu.instr.addr.rm]);
-               stats.numRegReads++;
+//                stats.numRegReads++;
                stats.numRegReads++;
                stats.numRegWrites++;
                break;
