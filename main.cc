@@ -21,7 +21,7 @@ int main(int argc, char ** argv) {
       opts.program = true;
       break;
     case 'd':
-    cout << "opts dump should be true\n";
+//     cout << "opts dump should be true\n";
       opts.dump = true;
       break;
     case 'i':
