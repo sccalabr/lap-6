@@ -603,7 +603,7 @@ void execute() {
                    rf.write(SP_REG, rf[sp.instr.mov.rm]);                   
                  }
                  else {
-                   rf.write(sp.instr.mov.rd, rf[sp.instr.mov.rm]);
+                   rf.write(sp.instr.mov.rd + 8, rf[sp.instr.mov.rm]);
                  }
                   stats.numRegReads++;
                   stats.numRegWrites++;
@@ -645,15 +645,15 @@ void execute() {
             break;
             case SP_ADD: 
               if (sp.instr.add.d == 1) {
-                if (sp.instr.mov.rd + 8 == SP_REG) { 
-                  rf.write(SP_REG, SP + rf[sp.instr.add.rd]);
+                if (sp.instr.add.rd + 8 == SP_REG) { 
+                  rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
                 }
                 else {
-                  rf.write(rf[sp.instr.add.rd], rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
+                  rf.write(sp.instr.add.rd, rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
                 }
               }
               else {
-                rf.write(rf[sp.instr.add.rd], rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
+                rf.write(sp.instr.add.rd, rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
               }
                rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
                stats.numRegReads++;
