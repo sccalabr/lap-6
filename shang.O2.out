@@ -10088,7 +10088,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -20377,7 +20377,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -30994,7 +30994,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -41939,7 +41939,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -53212,7 +53212,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -64813,7 +64813,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -76742,7 +76742,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -88999,7 +88999,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -101584,7 +101584,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -114497,7 +114497,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -127738,7 +127738,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -141307,7 +141307,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -155204,7 +155204,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -169429,7 +169429,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -183982,7 +183982,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -198863,7 +198863,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -214072,7 +214072,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -229609,7 +229609,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -245474,7 +245474,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -261667,7 +261667,7 @@ pop {r4, r5, r6, r7, pc}
 cmp r0, #0
 beq 0xd4
 adds r1, r7, #1
-mov r0, rd
+mov r0, r13
 bl 0x3ff
 push {r4, r5, r6, r7, lr}
 mov r7, ra
@@ -262977,8 +262977,8 @@ RF:
 Total number of dynamic instructions: 261935
 Number of Memory Reads: 44342
 Number of Memory Writes: 27710
-Number of Register Reads: 361514
-Number of Register Writes: 439949
+Number of Register Reads: 362337
+Number of Register Writes: 438370
 Branches: 
   Forward:
     Taken: 8001
@@ -262986,10 +262986,10 @@ Branches:
   Backward:
     Taken: 39109
     Not taken: 1801
-256 byte cache (blocksize 4 bytes): 49918 hits, 22052 misses (hit rate: 69.3595%)
-256 byte cache (blocksize 8 bytes): 57560 hits, 14410 misses (hit rate: 79.9778%)
-256 byte cache (blocksize 16 bytes): 60231 hits, 11739 misses (hit rate: 83.689%)
-256 byte cache (blocksize 32 bytes): 61685 hits, 10285 misses (hit rate: 85.7093%)
-256 byte cache (blocksize 64 bytes): 60971 hits, 10999 misses (hit rate: 84.7172%)
-256 byte cache (blocksize 128 bytes): 45232 hits, 26738 misses (hit rate: 62.8484%)
-256 byte cache (blocksize 256 bytes): 9715 hits, 62255 misses (hit rate: 13.4987%)
+256 byte cache (blocksize 4 bytes): 201875 hits, 60060 misses (hit rate: 77.0706%)
+256 byte cache (blocksize 8 bytes): 200407 hits, 61528 misses (hit rate: 76.5102%)
+256 byte cache (blocksize 16 bytes): 125730 hits, 136205 misses (hit rate: 48.0005%)
+256 byte cache (blocksize 32 bytes): 53573 hits, 208362 misses (hit rate: 20.4528%)
+256 byte cache (blocksize 64 bytes): 42892 hits, 219043 misses (hit rate: 16.3751%)
+256 byte cache (blocksize 128 bytes): 11273 hits, 250662 misses (hit rate: 4.30374%)
+256 byte cache (blocksize 256 bytes): 5664 hits, 256271 misses (hit rate: 2.16237%)

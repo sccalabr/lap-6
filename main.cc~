@@ -60,7 +60,7 @@ int main(int argc, char ** argv) {
   while(imem.inRange(rf[15])) {
       //cout << "--TOP--";
       execute();
-//       caches.access(rf[15]); 
+      caches.access(rf[15]); 
       //cout << "==BOTTOM==\n\n";
   }
   

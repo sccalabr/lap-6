@@ -457,9 +457,9 @@ void handleDPOps(DP_Ops dp_ops, DP_Type dp) {
    else*/ if(dp_ops == DP_CMP) {
    
       int arg1 = rf[dp.instr.dp.rdn];
-      stats.numRegReads++;
+//       stats.numRegReads++;
       int arg2 = rf[dp.instr.dp.rm];
-      stats.numRegReads++;
+//       stats.numRegReads++;
       result = arg1 - arg2;
       
       if(result < 0) {

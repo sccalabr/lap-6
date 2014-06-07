@@ -17672,7 +17672,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -27969,7 +27969,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -38594,7 +38594,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -49547,7 +49547,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -60828,7 +60828,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -72437,7 +72437,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -84374,7 +84374,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -96639,7 +96639,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -109232,7 +109232,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -122153,7 +122153,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -135402,7 +135402,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -148979,7 +148979,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -162884,7 +162884,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -177117,7 +177117,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -191678,7 +191678,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -206567,7 +206567,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -221784,7 +221784,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -237329,7 +237329,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3
@@ -253202,7 +253202,7 @@ lsls r3, r3, #1
 ldr r2, [pc, #100]
 mov r8, r3
 movs r3, #0
-add r8, r8, r12
+add r 8, r8, r12
 mov r5, r12
 mov r9, r2
 mov r12, r3

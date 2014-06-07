@@ -2,7 +2,7 @@ all:
 	g++ -g main.cc decode.cc thumbsim_driver.cc parse.cc execute.cc -o thumbsim
 
 run:
-	./thumbsim -s -i -d -f inputs/fib.sim
+	./thumbsim -i -d -f inputs/fib.sim
 
 clean:
 	rm -rf ./*.o ./thumbsim
