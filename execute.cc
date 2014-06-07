@@ -87,6 +87,22 @@ unsigned int signExtend8to32ui(char i) {
    return static_cast<unsigned int>(static_cast<int>(i));
 }
 
+unsigned int signExtend11to32ui(unsigned int i) {
+   unsigned int mask = 1 << 10;
+
+   
+   if(mask & i) {
+      i = i | 0xFFFFFC00;
+   }
+   else {
+      i = i & 0x000003FF;
+   }
+
+
+return i;
+   
+}
+
 void updateFlagsRegisterAndImmediateValueCMP(ALU_Type alu) {
    int regValue = rf[alu.instr.cmp.rdn];
 //    stats.numRegReads++;
@@ -352,7 +368,7 @@ int countOneBits(unsigned int instruction) {
 }
 
 void pushRegistersOntoStack(MISC_Type misc) {
-   unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list) + 1;
+   unsigned int numberOfRegisters = countOneBits(misc.instr.push.reg_list) + misc.instr.push.m;
    unsigned int spAddress = SP - 4 * numberOfRegisters;
    stats.numRegReads++;
    unsigned int i, mask;
@@ -370,7 +386,9 @@ void pushRegistersOntoStack(MISC_Type misc) {
          spAddress += 4;
       }
    }
-   dmem.write(spAddress, LR);
+   if(misc.instr.push.m) {
+      dmem.write(spAddress, LR);
+   }
    stats.numRegReads++;
    stats.numMemWrites++;
    rf.write(SP_REG, SP - 4 * numberOfRegisters);
@@ -378,7 +396,7 @@ void pushRegistersOntoStack(MISC_Type misc) {
 }
 
 void popRegistersOffOfStack(MISC_Type misc) {
-   unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list) + 1;
+   unsigned int numberOfRegisters = countOneBits(misc.instr.pop.reg_list) + misc.instr.pop.m;
    unsigned int spAddress = SP;
    stats.numRegReads++;
    unsigned int i, mask;
@@ -392,11 +410,12 @@ void popRegistersOffOfStack(MISC_Type misc) {
          spAddress += 4;
       }
    }
-
+   if(misc.instr.pop.m) {
+      rf.write(PC_REG, dmem[spAddress]);
+   }
    stats.numMemReads++;
    rf.write(SP_REG, SP + 4 * numberOfRegisters);
    stats.numRegWrites++;
-   rf.write(PC_REG, dmem[spAddress]);
    stats.numRegWrites++;
 }
 
@@ -649,13 +668,13 @@ void execute() {
                   rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
                 }
                 else {
-                  rf.write(sp.instr.add.rd, rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
+                  rf.write(sp.instr.add.rd + 8, rf[sp.instr.add.rd + 8] + rf[sp.instr.add.rm]);
                 }
               }
               else {
                 rf.write(sp.instr.add.rd, rf[sp.instr.add.rd] + rf[sp.instr.add.rm]);
               }
-               rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
+               //rf.write(SP_REG, SP + rf[sp.instr.add.rm]);
                stats.numRegReads++;
                stats.numRegReads++;
                stats.numRegWrites++;
@@ -683,20 +702,22 @@ void execute() {
                stats.numRegWrites++;
                stats.numMemReads++;
                break;
-            case LDRBI:
+            case LDRBI: 
+            {
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm;
                stats.numRegReads++;
-               addr = dmem[addr];
-               rf.write(ld_st.instr.ld_st_imm.rt, signExtend8to32ui((addr & 0x00FF)));
+               Data32 temp = dmem[addr];
+               rf.write(ld_st.instr.ld_st_imm.rt, temp.data_ubyte4(0));
                stats.numMemReads++;
                stats.numRegWrites++;
-               break;
+             }
+             break;
             case STRBI:
             {
                addr = rf[ld_st.instr.ld_st_imm.rn] + ld_st.instr.ld_st_imm.imm;
                stats.numRegReads++;
-               unsigned int addr2 = dmem[addr];
-               addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_imm.rt] & 0x000000FF));
+               Data32 addr2 = dmem[addr];
+               addr2.set_data_ubyte4(0, rf[ld_st.instr.ld_st_imm.rt] & 0x000000FF);
                stats.numRegReads++;
                dmem.write(addr, addr2);
                stats.numMemReads++;
@@ -704,23 +725,25 @@ void execute() {
             }                     
              break;
             case LDRBR:
+	    {
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
                stats.numRegReads++;
                stats.numRegReads++;
-               addr = dmem[addr];
+               Data32 temp = dmem[addr];
                stats.numMemReads++;
-               rf.write(ld_st.instr.ld_st_reg.rt, signExtend8to32ui((addr & 0x00FF)));
+               rf.write(ld_st.instr.ld_st_reg.rt, temp.data_ubyte4(0));
                stats.numRegWrites++;
-               break;
+            }   
+            break;
             case STRBR:
             {
                addr = rf[ld_st.instr.ld_st_reg.rn] + rf[ld_st.instr.ld_st_reg.rm];
                stats.numRegReads++;
                stats.numRegReads++;
                
-               unsigned int addr2 = dmem[addr];
+               Data32 addr2 = dmem[addr];
                stats.numMemReads++;
-               addr2 = (addr & 0xFFFFFF00) | ((rf[ld_st.instr.ld_st_reg.rt] & 0x000000FF));
+               addr2.set_data_ubyte4(0, ((rf[ld_st.instr.ld_st_reg.rt] & 0x000000FF)));
                stats.numRegReads++;
                dmem.write(addr, addr2);
                stats.numMemWrites++;
@@ -784,13 +807,12 @@ void execute() {
          break;
       case UNCOND:
          decode(uncond);
-         rf.write(PC_REG, PC + 2 * signExtend8to32ui(uncond.instr.b.imm) + 2);
+         rf.write(PC_REG, PC + 2 * signExtend11to32ui(uncond.instr.b.imm) + 2);
          stats.numRegReads++;
          stats.numRegWrites++;
          break;
       case LDM:
       {
-         //Stephen not sure and not need for fib
          decode(ldm);
          
          int counter = 0;
